@@ -1,0 +1,48 @@
+@extends('layouts.backend.app')
+
+@section('title','Pays')
+
+@push('css')
+
+@endpush
+
+@section('content')
+    <div class="container-fluid">
+        <!-- Vertical Layout | With Floating Label -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                          {{ __('Editer un pays') }}
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <form action="{{ route('admin.country.update',$country->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="form-group form-float">
+                                <div class="form-line {{ $errors->has('name') ? 'error' : ''}}">
+                                    <input type="text" id="name" class="form-control" name="name" value="{{ $country->name }}">
+                                    <label class="form-label">{{ __('Nom du pays') }}</label>
+                                </div>
+                                @if ($errors->has('name'))
+                                    <label class="error" role="alert">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </label>
+                                @endif
+                            </div>   
+
+                            <a  class="btn btn-danger m-t-15 waves-effect" href="{{ route('admin.country.index') }}">{{ __('Retour') }}</a>
+                            <button type="submit" class="btn btn-primary m-t-15 waves-effect">{{ __('Envoyer') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('script')
+
+@endpush
