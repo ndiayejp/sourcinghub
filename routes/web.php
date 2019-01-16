@@ -37,6 +37,14 @@ Route::resource('posts','PostsController');
 
 Route::resource('companies', 'CompaniesController');
 
+Route::resource('tenders','TendersController');
+
+Route::get('/quotation/{id}', 'TendersController@details')->name('quotation.details');
+
+Route::get('/quotations',['as'=> 'quotations','uses'=> 'TendersController@getAll']);
+
+Route::post('subscriber','SubscribersController@store')->name('subscriber.store');
+
 Route::get('/myposts',['as'=>'myposts','uses' =>'PostsController@index']);
 
 Route::get('/drafts',['as'=>'drafts','uses' =>'PostsController@drafts']);
@@ -85,6 +93,8 @@ Route::group(['middleware'=>['auth']], function (){
     
     Route::post('offre/{slug}','PostsController@reply')->name('posts.reply');
 
+    Route::post('quotation/{id}', 'TendersController@reply')->name('tenders.reply');
+
     Route::post('/assign/{post}','AssignController@store')->name('assign.store');
 
     Route::post('/invite/post', 'InvitesController@store');
@@ -93,7 +103,10 @@ Route::group(['middleware'=>['auth']], function (){
 
     Route::get('providers','UsersController@getProviders')->name('providers');
 
+ 
     Route::get('profile/{company}/{id}','ProfilesController@profile')->name('profile');
+
+    Route::post('profile/{id}','ProfilesController@store')->name('profile.store');
 
     Route::get('customers','UsersController@getCustomers')->name('customers');
 });
@@ -108,11 +121,12 @@ Route::group(['as'=>'admin.','prefix'=>'admin','namespace'=>'admin','middleware'
     Route::resource('unit','UnitsController');
     Route::resource('user','UserController');
     Route::resource('post','PostController');
+    Route::resource('tender','TenderController');
     Route::resource('incoterm','IncotermController');
 
     Route::get('post/{slug}','PostController@show')->name('post.show');
 
-
+    Route::get('/subscribers', 'UserController@subscribers')->name('user.subscribers');
     Route::get('/country','CountriesController@index')->name('country.index');
     Route::delete('/country/{country}','CountriesController@destroy')->name('country.destroy');
 

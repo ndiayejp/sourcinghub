@@ -33,20 +33,17 @@ class Profile extends Model
     }
 
     public static function cleanCaracteresSpeciaux ($chaine)
+    {
+        setlocale(LC_ALL, 'fr_FR'); 
+        $chaine = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $chaine); 
+        $chaine = preg_replace('#[^0-9a-z]+#i', '-', $chaine); 
+        while(strpos($chaine, '--') !== false)
         {
-            setlocale(LC_ALL, 'fr_FR');
+            $chaine = str_replace('--', '-', $chaine);
+        } 
+        $chaine = trim($chaine, '-'); 
+        return $chaine;
+    }
 
-            $chaine = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $chaine);
-
-            $chaine = preg_replace('#[^0-9a-z]+#i', '-', $chaine);
-
-            while(strpos($chaine, '--') !== false)
-            {
-                $chaine = str_replace('--', '-', $chaine);
-            }
-
-            $chaine = trim($chaine, '-');
-
-            return $chaine;
-        }
+   
 }

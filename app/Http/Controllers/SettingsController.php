@@ -13,10 +13,19 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 
-
+/**
+ *  Parametres  class
+ */
 class SettingsController extends Controller
 {
 
+    /**
+     * mettre à jour un profil
+     *
+     * @param Guard $auth
+     * @param Request $request
+     * @return void
+     */
     public function updateProfile(Guard $auth,Request $request)
     {
         $user = User::findOrFail(Auth::id());
@@ -31,11 +40,19 @@ class SettingsController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * mettre à jour un mot de passe
+     *
+     * @param Request $request
+     * @return void
+     */
     public function updatePassword(Request $request){
+
         $this->validate($request,[
             'old_password' => 'required',
             'password' => 'required|confirmed',
         ]);
+
         $hashedPassword = Auth::user()->password;
         if (Hash::check($request->old_password,$hashedPassword))
         {

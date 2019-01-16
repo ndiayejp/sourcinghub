@@ -10,6 +10,6 @@ class RepliesController extends Controller
 {
     public function store(Request $request,$post)
     {
-         dd($request);
+        // dd($request);
     }
 }

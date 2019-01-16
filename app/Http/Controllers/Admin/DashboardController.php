@@ -6,6 +6,8 @@ use App\Post;
 use App\User;
 use App\Profile;
 use App\Category;
+use App\Subscriber;
+use App\Tender;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
  use App\Http\Controllers\Controller;
@@ -44,7 +46,13 @@ class DashboardController extends Controller
                                 ->take(10)->get();
 
        $category_count = Category::all()->count();
+
+       $subscribers  = Subscriber::all()->count();
+
+       $tenders  = Tender::all()->count();
+
        return view('admin.dashboard',compact('posts','total_pending_posts',
-        'all_views','category_count','author_count','new_authors_today','active_authors','popular_posts'));
+        'all_views','category_count','author_count','new_authors_today','active_authors',
+        'popular_posts','subscribers','tenders'));
     }
 }

@@ -15,6 +15,16 @@
                     </h2>
                     <div class="row">
                         <div class="col-md-12">
+                            @if(count($errors) >0 )
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
+                                    </ul>
+                                    </div>
+                            @endif
                             {!! Form::open(['action' => 'PostsController@store', 'method' => 'POST', 'enctype' => 'multipart/form-data','id'=>'insert_form']) !!}
                                  <div class="form-group">
                                     {{Form::label('company_id', 'Compagnie')}}  
@@ -123,13 +133,27 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             {!! Form::label('categories', "Secteur d'activité"); !!} <sup>*</sup><br>
-                                            {!! Form::select('categories[]', $categories,null, ['class' => 'form-control select','multiple']); !!}
+                                            {!! Form::select('category_id', $categories,null, ['class' => 'form-control select']); !!}
                                             @if ($errors->has('categories[]'))
                                                 <span class="help-block" role="alert">
                                                     <strong>{{ $errors->first('categories[]') }}</strong>
                                                 </span>
                                             @endif 
+                                        </div>
+                                        <div class="form-group {{ $errors->has('open_id') ? 'has-error' : ''}}">
+                                            {!! Form::label('open_id', __("Type de marché")); !!}
+                                            {!! Form::select('opens[]', $opens,null, ['class' => 'form-control select','multiple']); !!}
                                         </div> 
+                                        <div class="form-group">
+                                            {!! Form::label('areas', "Domaine d'activité"); !!} <sup>*</sup><br>
+                                            {!! Form::select('area_id', $areas,null, ['class' => 'form-control select']); !!}
+                                            @if ($errors->has('areas[]'))
+                                                <span class="help-block" role="alert">
+                                                    <strong>{{ $errors->first('areas[]') }}</strong>
+                                                </span>
+                                            @endif 
+                                        </div>
+                                        
                                        <div class="row">
                                            <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('incoterm_id') ? 'has-error' : ''}}">
@@ -208,14 +232,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                    <div class="form-group {{ $errors->has('open_id') ? 'has-error' : ''}}">
-                                                            {!! Form::label('open_id', __("Marché")); !!}
-                                                            {!! Form::select('opens[]', $opens,null, ['class' => 'form-control select','multiple']); !!}
-                                                    </div>
-                                            </div>
-                                        </div>
+                                       
                                         <hr>
                                         <div class="row">  
                                             <div class="col-md-12">
@@ -245,7 +262,7 @@
                                 </div> 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {{Form::submit("Publier l'appel d'offre ",['class'=>'btn btn-primary btn-lg btn-block','name'=>'publish'])}}
+                                        {{Form::submit("Enregistrer l'appel d'offre ",['class'=>'btn btn-primary btn-lg btn-block','name'=>'publish'])}}
                                     </div>
                                     <div class="col-md-6">
                                         {{Form::submit("Enregistrer comme brouillon ",['class'=>'btn btn-default btn-lg btn-block','name'=>'draft'])}}

@@ -3,8 +3,7 @@
 @section('title','Utilisateurs')
 
 @push('css')
-    <!-- JQuery DataTable Css -->
-    <link href="{{ asset('assets/backend/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css') }}" rel="stylesheet">
+     <link href="{{ asset('assets/backend/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -36,6 +35,7 @@
                                     <th>{{ __('Email') }}</th>
                                     <th>{{ __('Prenom/Nom ') }}</th>
                                     <th>{{ __('Statut') }}</th>
+                                    <th>{{ __("Mis en avant") }}</th>
                                     <th>{{ __('Actions') }}</th>
                                 </tr>
                                 </thead>
@@ -51,7 +51,7 @@
                                                 <img src="/assets/backend/images/user.png" width="48" height="48" alt="User" class="circle " />
                                                 @endif
                                             </td>
-                                            <td>{{ $user->profile()->pluck('type')[0] }}</td>
+                                            <td>{{ isset($user->profile()->pluck('type')[0]) ? $user->profile()->pluck('type')[0] : ""}}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ empty($user->firstname) ? ":)" : $user->fullName }}</td>
                                             <td>
@@ -61,6 +61,13 @@
                                                     <span class="badge bg-pink">{{ __('Non actif') }}</span>
                                                 @endif
                                             </td>
+                                            <td>
+                                                 @if($user->featured == 1)
+                                                    <span class="badge bg-green">{{ __('Mis en avant') }}</span>
+                                                @else
+                                                    <span class="badge bg-primary">{{ __('Non mis en avant') }}</span>
+                                                @endif
+                                            </td>
                                              <td class="text-center">
                                                 <a href="{{ route('admin.user.edit',$user->id) }}" class="btn btn-info waves-effect">
                                                     <i class="material-icons">edit</i>
@@ -68,7 +75,7 @@
                                                 <button class="btn btn-danger waves-effect" type="button" onclick="deleteUser({{ $user->id }})">
                                                     <i class="material-icons">delete</i>
                                                 </button>
-                                                <form id="delete-form-{{ $user->id }}" action="{{ route('admin.country.destroy',$user->id) }}" method="POST" style="display: none;">
+                                                <form id="delete-form-{{ $user->id }}" action="{{ route('admin.user.destroy',$user->id) }}" method="POST" style="display: none;">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>

@@ -2,12 +2,14 @@
 namespace App\Http\Controllers\Admin;
 use App\User;
 use Carbon\Carbon;
+use App\Subscriber;
 use Illuminate\Http\Request;
 use MercurySeries\Flashy\Flashy;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -24,10 +26,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = $this->auth->user();
-
-        $users = User::latest()->get()->where('id','!=',$user->id);
-        return view('admin.user.index',compact('users'));
+       
+        $users = User::latest()
+        ->where('id', '!=', Auth::id())
+        ->with('profile')
+        ->get();
+          return view('admin.user.index',compact('users'));
     }
     /**
      * Show the form for creating a new resource.
@@ -47,15 +51,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,User::$rules);
-        
-       
-        
         $user = new User();
-       
-        
         $user->name = $request->name;
-        
-          
         $user->save();
         Flashy::success('Utilisateur ajoutée :)');
         return redirect()->route('admin.user.index');
@@ -90,11 +87,9 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
-        
         $user = User::find($id);
-        
         $user->active = $request->active;
+        $user->featured = $request->featured;
         $user->save();
         Flashy::message('Utilisateur bien mise à jour :)');
         return redirect()->route('admin.user.index');
@@ -108,9 +103,16 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        
         $user->delete();
         Flashy::success('Utilisateur supprimée :)');
         return redirect()->back();
+    }
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function subscribers(){
+        $users = Subscriber::get();
+        return view('admin.user.subscribers',compact('users'));
     }
 }

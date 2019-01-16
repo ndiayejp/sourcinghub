@@ -19,7 +19,7 @@ class CreateRepliesTable extends Migration
             $table->text('body')->nullable();
             $table->string('file')->nullable();
             $table->decimal('amount', 8, 2)->default(0);
-            $table->dateTime('delivery');
+            $table->string('delivery');
             $table->integer('post_id')->unsigned()->index();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('incoterm_id')->unsigned()->index();

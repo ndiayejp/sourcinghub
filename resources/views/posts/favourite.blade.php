@@ -32,7 +32,10 @@
                                         <div class="col-sm-12 col-xs-12 add-desc-box">
                                             <div class="add-details jobs-item">
                                                
-                                                <h4><a href="{{ url("/offre/".$post->slug) }}">{{ $post->name }}</a></h4>
+                                                <h4>
+                                                <a href="{{ url("/offre/".$post->slug) }}">{{ $post->name }}</a>
+                                                <span style="display:block">{{__("N° appel d'offre:")}} {{'AO'.'-'.$post->id.'-'.Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->year }}</span>
+                                                </h4>
                                                 <span class="info-row">
                                                         <span class="date">
                                                             <i class="icon-clock"> </i>

@@ -20,13 +20,9 @@ class FilesController extends Controller
     public function destroy($id)
     {
         //
-        $filename = File::where('id',$id)->pluck('name')->toArray();
-        
-
+        $filename = File::where('id',$id)->pluck('name')->toArray(); 
         $image_path = 'uploads/'.$filename[0];
-        unlink($image_path);
-       
-
+        unlink($image_path); 
         $file = File::destroy($id);
         return Response::json($file);
     }

@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laracarte'),
+    'name' => env('APP_NAME', 'SourcingHub'),
 
     /*
     |--------------------------------------------------------------------------
@@ -146,6 +146,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        willvincent\Rateable\RateableServiceProvider::class,
         
 
         /*
@@ -156,6 +157,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        willvincent\Rateable\RateableServiceProvider::class,
         
         /*
          * Application Service Providers...

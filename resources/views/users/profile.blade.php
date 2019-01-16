@@ -15,41 +15,27 @@
                                 <aside class="panel panel-body panel-details job-summery">
                                     <ul>
                                         <li>
-                                            @if($profile->image)
-                                            <img class="img-responsive" src="{{ URL::to('/') }}/img/profile/{{ $profile->image }}" width="90px">
-                                            @else
-                                            <img src="{{ URL::to('/') }}/img/noimage.jpg" class="img-responsive">
+                                            @if($profile->image!="noimage.jpg")
+                                            <img class="img-responsive" src="{{ URL::to('/') }}/img/profile/{{ $profile->image }}" width="90px" height="100%">
                                             @endif
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __('Adresse') }}:
-                                                </strong>&nbsp;  {{ $profile->address }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __('Adresse') }}: </strong>&nbsp;  {{ $profile->address }}</p>
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __('Téléphone') }}:
-                                                </strong>&nbsp;  {{ $profile->phone }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __('Téléphone') }}:</strong>&nbsp;  {{ $profile->phone }}</p>
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __('Pays') }}:
-                                                </strong>&nbsp;  {{ $profile->country->name }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __('Pays') }}: </strong>&nbsp;  {{ $profile->country->name }}</p>
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __('Pays') }}:
-                                                </strong>&nbsp;  {{ $profile->country->name }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __('Pays') }}: </strong>&nbsp;  {{ $profile->country->name }}</p>
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __("Secteur d'activité") }}:
-                                                </strong>&nbsp;  {{ $profile->category->name }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __("Secteur d'activité") }}: </strong>&nbsp;  {{ $profile->category->name }} </p>
                                         </li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __("Fonction") }}:
-                                                </strong>&nbsp;  {{ $profile->activity->name }}
-                                            </p>
+                                            <p class="no-margin"> <strong>{{ __("Fonction") }}: </strong>&nbsp;  {{ $profile->activity->name }} </p>
                                         </li> 
                                         <li>
                                             <p class="no-margin"> <strong>{{ __("Taille de l'entreprise") }}:</strong>
@@ -84,7 +70,28 @@
                                         </div>
                                         <div class="panel-body">
                                                 {!! $profile->about !!}
-                                        </div> 
+                                                @if($galleries->count()>0)
+                                                   <div class="row">
+                                                        @foreach($galleries as $img)
+                                                            <div class="col-md-4">
+                                                                <img src="{{ URL::to('/') }}/storage/gallery/thumbnail/{{ $img->name }}" style="height:auto;width:100%">
+                                                            </div>
+                                                        @endforeach
+                                                   </div>
+                                                   <hr>
+                                                @endif
+                                                @if(Auth::user()->profile()->pluck('type')[0]=="acheteur")
+                                                    <form method="POST" action="{{ route('profile.store',$profile->user_id) }}">
+                                                        {{ csrf_field() }}   
+                                                        <div class="rating"> 
+                                                            <input id="input-1" name="rate" class="rating rating-loading" data-min="0" data-max="5" data-step="1" value="{{ $RateAverage }}" data-size="xs">
+                                                            <input type="hidden" name="id" value="{{ $profile->user_id }}">
+                                                            <button class="btn btn-success">{{ __('Noter')}}</button>
+                                                        </div>
+                                                    </form>
+                                                @endif
+
+                                                
                                 </div>
                         </div>
                     </div>

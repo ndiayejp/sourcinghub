@@ -7564,7 +7564,7 @@ fieldset[disabled] .form-control {
   .sidebar .menu {
     position: relative;
     overflow-y: auto;
-    height: 90vh; }
+    height: 60vh; }
     .sidebar .menu .list {
       list-style: none;
       padding-left: 0; }

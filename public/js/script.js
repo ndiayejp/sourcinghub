@@ -1,4 +1,6 @@
-$(document).ready(function(){
+var $=jQuery.noConflict();
+
+jQuery(document).ready(function($){
 
      // hide #backToTop first
     var top = $('#backToTop');
@@ -31,4 +33,6 @@ $(document).ready(function(){
 	});
 
 	$('[data-toggle="tooltip"]').tooltip();
-})
+});
+
+

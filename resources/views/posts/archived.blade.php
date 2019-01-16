@@ -60,11 +60,13 @@
                                             <label><input type="checkbox" name="entries[]" value="898"></label>
                                         </div>
                                     </td>
-                                        <td class="ads-details-td">{{ $post->name }}</td>
+                                    <td class="ads-details-td">
+                                        {{ $post->name }}
+                                    </td>
                                     <td class="ads-cat-td">
-                                        @foreach ($post->categories as $cat )
-                                            <span class="label label-default">{{ $cat->name }}</span>
-                                        @endforeach    
+                                       
+                                            <span class="label label-default">{{ $post->category->name }}</span>
+                                      
                                     </td>
                                     <td>{{ $post->view_count }}</td>
                                     <td><a href="{{ url("/offre/".$post->slug) }}" class="badge badge-light">{{ $post->offers_count }}</a>      </td>

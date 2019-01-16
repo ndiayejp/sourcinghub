@@ -1,50 +1,87 @@
 @extends('layouts.backend.app')
-
 @section('title','Post')
-
 @push('css')
-
 @endpush
 
 @section('content')
     <div class="container-fluid">
-        <!-- Vertical Layout | With Floating Label -->
-        <a href="{{ route('admin.post.index') }}" class="btn btn-danger waves-effect">{{ __('Retour') }}</a>
-         
+        <a href="{{ route('admin.post.index') }}" class="btn btn-danger waves-effect">
+            {{ __('Retour') }}</a>
         <br>
         <br>
+        <form action="{{ route('admin.post.update',$post->id) }}" method="POST" enctype="multipart/form-data">
+           @csrf
             <div class="row clearfix">
                 <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>
-                              {{ $post->name }}
-                                <small>{{ __('Publié par') }} <strong> <a href="">{{ $post->user->name }}</a></strong> {{ __('le') }} {{ $post->created_at->toFormattedDateString() }}</small>
-                            </h2>
+                            <h2> {{ $post->name }}<small>{{ __('Publié par') }} <strong> 
+                                {{ $post->user->name }}</strong> 
+                                {{ __('le') }} {{ $post->created_at->toFormattedDateString() }}
+                           {{ __("pour le compte de l'entreprise") }} <strong>{{ $post->company->name }}</strong> </small>  </h2>
+                        <p><small>{{ __("Date de fermeture") }} {{ $post->closing_date }}</small></p>
+                        <p><small>{{ __("Date de livraison") }} {{ $post->delivery_date }}</small></p>
                         </div>
                         <div class="body">
-                            {!! $post->description !!}
+                            <p>{!! $post->description !!}</p>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <th>{{ __("Méthode de paiement") }}</th>
+                                    <th>{{ __("Devise") }}</th>
+                                    <th>{{ __("Adresse de livraison") }}</th>
+                                    <th>{{ __("Pays") }}</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $post->payment_method }}</td>
+                                        <td>{{ $post->offer_in_device }}</td>
+                                        <td>{{ $post->address_delivery }}</td>
+                                        <td>{{ $post->country->name }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header bg-cyan">
-                            <h2>
-                                {{ __('Catégories') }}
-                            </h2>
-                        </div>
-                        <div class="body">
-                            @foreach($post->categories as $category)
-                                <span class="label bg-cyan">{{ $category->name }}</span>
-                            @endforeach
-                        </div>
-                    </div>
-                    
-                     
-
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <h5> {{ __("Secteur d'activité") }}</h5>
+                            <p> {{ $post->category->name }}</p>
+                        </li>
+                        <li class="list-group-item">
+                            <h5>{{ __("Domaine d'activité") }}</h5>
+                            <p>{{ $post->area->name }}</p>
+                        </li>
+                        
+                    </ul> 
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <h5> {{ __("Contact de l'acheteur") }}</h5>
+                            <p>{{ $post->user->firstname.' '.$post->user->lastname }}</p>
+                            <p>{{ $post->user->profile()->pluck('phone')[0] }}</p>
+                            <p>{{ $post->user->profile()->pluck('address')[0] }}</p>
+                            <p>{{ $post->user->email }}</p>
+                        </li> 
+                    </ul> 
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="body">
+                             <div class="form-group">
+                                <input type="checkbox" id="active" class="filled-in" name="active" value="1" {{ $post->active == true ? 'checked' : '' }}>
+                                <label for="active">Mettre en ligne</label>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">{{ __('Mettre à jour') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 
@@ -105,5 +142,4 @@
             })
         }
     </script>
-
 @endpush

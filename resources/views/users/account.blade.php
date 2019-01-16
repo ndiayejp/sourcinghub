@@ -239,7 +239,7 @@
                                         <div class="form-group {{ $errors->has('category_id') ? 'has-error' : ''}}">
                                                 <div  class="col-md-6">  
                                                     <label for="">{{ __("SECTEUR D'ACTIVITE") }}</label>
-                                                    <select name="category_id" id="" class="form-control">
+                                                    <select name="category_id" class="form-control">
                                                         <option value="">{{ __("Choississez") }}</option>
                                                         @foreach($categories as $category)
                                                             <option <?php echo Auth::user()->profile()->pluck('category_id')[0] == $category->id ? 'selected' : ''?>
@@ -288,6 +288,12 @@
                                                         <strong>{{ $errors->first('country_id') }}</strong>
                                                     </span>
                                                 @endif 
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="exampleInputFile">{{__("Galerie")}}</label>
+                                                <input class="form-control" type="file" name="gallery[]" id="gallery" multiple />
                                             </div>
                                         </div>
                                         <div class="form-group  {{ $errors->has('about') ? 'has-error' : ''}}">

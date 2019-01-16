@@ -50,10 +50,8 @@ class InvitesController extends Controller
     public function store(Request $request)
     {
         
-        $emails = explode(',', $request->email);
-       
-        $validator = Validator::make(Input::all(), $this->rules);
-
+        $emails = explode(',', $request->email); 
+        $validator = Validator::make(Input::all(), $this->rules); 
         if ($validator->fails()) {
             return Response::json(array('errors' => $validator->getMessageBag()->toArray()));
         } else {
@@ -71,15 +69,11 @@ class InvitesController extends Controller
                 $invite->user_id = $request->user;
                 $invite->email = $request->email;
                 $invite->save();
-             }
-            
+             }  
 
-            $post= Post::where('id',$request->id)->first();
-
-            $users = Invite::all();
-
-            Notification::send($users, new InviteUser($post));
-            
+            $post= Post::where('id',$request->id)->first(); 
+            $users = Invite::all();  
+            Notification::send($users, new InviteUser($post)); 
             return response()->json(['success'=>'Data is successfully added']);
         }
     }

@@ -13,7 +13,7 @@
                     <div class="col-sm-9 page-content"> 
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                    <h4>{{ __("Ajouter un utilisateur") }}</h4>
+                                    <h3><i class="fa fa-user-plus"></i> {{ __("Ajouter un utilisateur") }}</h3>
                             </div>
                             <div class="panel-body">
                                     <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data" class="form-horizontal">

@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Session;
 
 class FavoriteController extends Controller
 {
-    
+    /**
+     * sauvegarder un post en favoris
+     *
+     * @param [type] $post
+     * @return void
+     */
     public function add($post)
-    {
-
-        
+    { 
         $user = Auth::user();
         $isFavorite = $user->favorite_posts()->where('post_id',$post)->count();
          

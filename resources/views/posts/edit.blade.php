@@ -13,6 +13,16 @@
                     <h2 class="title-2"> <i class="icon-docs"></i> {{ __("Mise à jour appel d'offre Numéro")." ".$post->id }}</h2>
                     <div class="row">
                         <div class="col-md-12">
+                            @if(count($errors) >0 )
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
+                                    </ul>
+                                    </div>
+                            @endif
                             {!! Form::model($post,['method' => 'put','url' => route('posts.update',$post),'files'=>true]) !!}
                                  
                                 <div class="form-group {{ $errors->has('company_id') ? 'has-error' : ''}}">
@@ -81,17 +91,19 @@
                                         </div>
                                        
                                         <div class="form-group"> 
-                                                {{Form::label('Items', __("Composer une liste d'articles"))}}   
+                                                {{Form::label('Items', __("Modifier  les articles"))}}   
                                                 <table class="table table-bordered" id="item_table">
                                                     <tr>
                                                         <th>{{ __('Désignation') }}</th>
                                                         <th>{{ __('Description') }}</th>
                                                         <th style="width:18%">{{ __('Unité') }}</th>
                                                         <th>{{ __('Quantité') }}</th> 
-                                                        <th><button type="button" name="add" class="btn btn-success btn-sm add"><span class="fa fa-plus"></span></button></th>
+                                                        {{--  <th><button type="button" name="add" class="btn btn-success btn-sm add"><span class="fa fa-plus"></span></button></th>  --}}
                                                     </tr>
                                                     <tr>
+                                                        
                                                        @foreach ($items as $item )
+                                                       <tr>
                                                        {{Form::hidden('item_id[]', $item['id'], ['class' => 'form-control'])}}
                                                         <td>{{Form::text('item_name[]', $item['item_name'], ['class' => 'form-control'])}}</td>
                                                         <td>{{Form::textarea('item_description[]', $item['item_description'], ['class' => 'form-control','rows' => 1])}}</td>
@@ -107,16 +119,22 @@
                                                             </select>
                                                         </td>
                                                         <td>{{Form::number('item_qte[]', $item['item_qte'], ['class' => 'form-control'])}}</td>
-                                                        <td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fa fa-minus"></span></button></td></tr>
+                                                        {{--  <td><button type="button" name="remove" class="btn btn-danger btn-sm remove"><span class="fa fa-minus"></span></button></td></tr>  --}}
+                                                        </tr>
                                                         @endforeach
+                                                    </tr>
                                                     </table>        
                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            {!! Form::label('categories', __('Catégories')); !!} <sup>*</sup>
-                                            {!! Form::select('categories[]', $categories,null, ['class' => 'form-control select','multiple']); !!}
+                                            {!! Form::label('categories', __("Secteur d'activité")); !!} <sup>*</sup>
+                                            {!! Form::select('category_id', $categories,null, ['class' => 'form-control select']); !!}
+                                        </div>
+                                        <div class="form-group">
+                                            {!! Form::label('areas', __("Domaine d'activité")); !!} <sup>*</sup>
+                                            {!! Form::select('area_id', $areas,null, ['class' => 'form-control select']); !!}
                                         </div>
 
                                         <div class="row">
@@ -188,6 +206,10 @@
                                                         </span>
                                                     @endif
                                                 </div>
+                                                 <div class="form-group {{ $errors->has('opens') ? 'has-error' : ''}}">
+                                                    {!! Form::label('opens', __("Type de marché")); !!}
+                                                    {!! Form::select('opens[]', $opens,$post->opens->pluck('id'), ['class' => 'form-control select','multiple']); !!}
+                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('address_delivery') ? 'has-error' : ''}}">
@@ -202,15 +224,7 @@
                                             </div>
                                                  
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group {{ $errors->has('opens') ? 'has-error' : ''}}">
-                                                    {!! Form::label('opens', __("Marché")); !!}
-                                                    {!! Form::select('opens[]', $opens,$post->opens->pluck('id'), ['class' => 'form-control select','multiple']); !!}
- 
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         <hr>
                                         <div class="row">  
                                             <div class="col-md-12">
@@ -264,16 +278,11 @@
                                 </div>  
                                
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                             {{Form::submit("Mettre à jour l'appel d'offre ", 
                                             ['class'=>'btn btn-primary btn-lg btn-block','name'=>'publish'])}}
                                     </div>
-                                    <div class="col-md-6">
-                                            @if($post->state['url_state'] == 'en-cours')
-                                            {{Form::submit("Enregistrer comme brouillon ", 
-                                            ['class'=>'btn btn-default btn-lg btn-block','name'=>'draft'])}}
-                                            @endif
-                                    </div>
+                                   
                                 </div>
                             {!! Form::close() !!}
                         </div>
