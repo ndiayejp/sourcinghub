@@ -9,23 +9,56 @@
         <div class="panel-header"> <h3 class="title-2"><i class="icon-docs"></i> <strong>{{ $post->name }}</strong></h3> </div>
         <div class="panel-body"> 
             <div class="row info-row">
-                <div class="col-md-8">
-                    <ul class="list-unstyled">
-                        <li style="margin-bottom:10px;">
-                            <span class="date"><i class=" icon-calendar"></i> {{ $post->created_at->diffForHumans() }} </span> 
-                            <span class="category"><span class="label label-default">{{ $post->category->name }}</span></span>
-                        </li>
-                        <li>
-                            <span class="item-location"><i class="fa fa-map-marker"></i> {{ $post->address_delivery.'- '.$post->country->name}}  </span> -&nbsp;
-                            <span class="category"><i class="icon-eye-3"></i> {{ $post->view_count }}</span>
-                        </li>
-                    </ul>
+                <div class="col-md-3">
+                    <div>
+                        <h5>{{ __("Appel d'offre public ") }}</h5>
+                        <p>@foreach ($post->opens as $open)
+                            {{ $open->name.' ' }}
+                        @endforeach</p>
+                    </div>
                 </div>
-                <div class="col-md-4 text-right">
-                    <ul class="list-unstyled">
-                        <li><span><b>{{ __( "Date de publication") }}</b>   {{ $post->created_at->format('d F Y').''}}</span></li>
-                        <li><span><b>{{ __("Date de clôture") }}</b> {{ date('d F Y', strtotime($post->closing_date)) }}</span></li>
-                    </ul>
+                <div class="col-md-3">
+                    <h5><i class="fa fa-calendar"></i> {{ __("Date de parution") }}</h5>
+                    <p>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</p>
+                </div>
+                <div class="col-md-3">
+                    <div>
+                        <h5><i class="fa fa-calendar"></i> {{ __("Date de clôture") }}</h5>
+                        <p>{{ \Carbon\Carbon::parse($post->closing_date)->format('d/m/Y')}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div>
+                        <h5><i class="fa fa-map-marker"></i> {{ __("Localisation") }}</h5>
+                        <p> {{ $post->address_delivery.'- '.$post->country->name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row info-row">
+                <div class="col-md-3">
+                    <div>
+                        <h5>{{ __("Secteur d'activité") }}</h5>
+                        <p>{{ $post->category->name }}</p>
+                    </div>
+                </div>
+               
+                <div class="col-md-3">
+                     <div>
+                        <h5>{{ __("Domaine d'activité") }}</h5>
+                        <p>{{ $post->area->name }}</p>
+                    </div>
+                </div>
+                 <div class="col-md-3">
+                     <div>
+                        <h5><i class="icon-eye-3"></i> {{ __("Nombre de vues") }}</h5>
+                        <p>{{ $post->view_count }}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                     <div>
+                        <h5></h5>
+                        <p></p>
+                    </div>
                 </div>
             </div>
             <div class="ads-details">
@@ -53,7 +86,17 @@
                                         </h4>
                                     </div>
                                     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                        <div class="panel-body">{!! $post->company->description !!} </div>
+                                        <div class="panel-body">
+                                            {!! $post->company->description !!}
+                                            <ul class="list-group" style="margin-left:0 !important;">
+                                             
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Secteur d'activité: ") }}</strong>{{ $post->user->profile->category->name }}</li>
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Taille: ") }}</strong>{{ $post->user->profile()->pluck('firmsize')[0] }}</li>
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Pays: ") }} </strong>{{ $post->country->name }}</li>
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Ninéa: ") }}</strong> {{ $post->user->profile()->pluck('siret')[0] }}</li>
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Adresse de facturation: ") }}</strong> {{ $post->address_delivery }}</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 @if(count($post->files)!=0)
@@ -85,10 +128,10 @@
                                     <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
                                         <div class="panel-body">
                                             <ul class="list-unstyled">
-                                                <li><b>{{ __("Identification") }}</b> {{ $post->user->firstname.' '.$post->user->lastname }}</li>
-                                                <li><b>{{ __("Téléphone") }} </b>{{ Auth::user()->profile()->pluck('phone')[0] }}</li>
-                                                <li><b>{{ __("Adresse") }} </b>{{ Auth::user()->profile()->pluck('address')[0] }}</li>
-                                                <li><b>{{ __("Email") }} </b>{{ $post->user->email }}</li>
+                                                <li><b>{{ __("Fonction: ") }} </b>{{ Auth::user()->profile->activity->name }}</li>
+                                                <li><b>{{ __("Téléphone: ") }} </b>{{ Auth::user()->profile()->pluck('phone')[0] }}</li>
+                                                <li><b>{{ __("Adresse: ") }} </b>{{ Auth::user()->profile()->pluck('address')[0] }}</li>
+                                                <li><b>{{ __("Email: ") }} </b>{{ $post->user->email }}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -174,10 +217,10 @@
                                                             <?php   
                                                             $tab[$vv['id']] =  $vv['price']* $v['item_qte'];
                                                             $sum[$i] +=   $vv['price']* $v['item_qte'] ; ?>
-                                                            <td>{{ number_format($vv['price'],0,'',' ') }}</td> 
+                                                            <td>{{ $vv['price'] }}</td> 
                                                             <?php $tab[$i]= $vv['price']* $v['item_qte']  ; ?>
                                                             <td colspan="2"class="Totalprice"  id="Totalprice-{{ $k }}-{{ $kk }}">  
-                                                                {{  number_format($vv['price']* $v['item_qte'], 0, '', ' ')}} 
+                                                                {{  $vv['price']*$v['item_qte'] }} 
                                                             </td>
                                                             <?php $i++; $g++; ?> 
                                                         @endforeach
@@ -186,7 +229,7 @@
                                             <tr>
                                                 <td colspan="4" class="style7" style="text-align:left">{{ __("Total des Articles") }}</td>
                                                 @for ($i =0 ; $i <sizeof($sum) ; $i++)
-                                                    <td colspan="3"  class="style7"   style="text-align:center">   {{number_format( $sum[$i],0, '', ' ') }}</td>
+                                                    <td colspan="3"  class="style7"   style="text-align:center">   {{ number_format($sum[$i],2, ',', ' ') }}</td>
                                                 @endfor    
                                             </tr>
                                             <tr>
@@ -195,15 +238,20 @@
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
                                                         <?php  $sumTotal[$j] += $sum[$j] + $post->replies[$j]->amount;?>
-                                                        <td colspan="3" style="text-align:center">{{ number_format($post->replies[$j]->amount,0,'',' ') }} </td>
+                                                        <td colspan="3" style="text-align:center">{{ number_format($post->replies[$j]->amount,2,',',' ') }} </td>
                                                     @endfor
                                                 @endfor  
                                             </tr>
                                             <tr class="grandTotal">
-                                                <td colspan="4" style="text-align:left;background:#000;color:red;">{{ __("Grand Total") }}</td>
-                                                <?php $minTotal = min($sumTotal);?>
+                                                <td colspan="4" style="text-align:left;background:#000;color:red;">{{ __("Grand Total ")  }} ({{ $post->offer_in_device }})</td>
+                                                <?php 
+                                                if(count($sumTotal)>0){
+                                                     $minTotal =   min($sumTotal);
+                                                }
+                                               
+                                                ?>
                                                 @for ($i =0 ; $i <sizeof($sumTotal) ; $i++)
-                                                    <td colspan="3" id="totalSum-{{$i}}" class="totalSum" style="text-align:center">{{ number_format($sumTotal[$i],0,'',' ') }} </td>
+                                                    <td colspan="3" id="totalSum-{{$i}}" class="totalSum" style="text-align:center">{{ $sumTotal[$i] }} </td>
                                                 @endfor    
                                             </tr>
                                             <tr class="row10">
@@ -211,7 +259,7 @@
                                                 @for ($i =0 ; $i <sizeof($sumTotal) ; $i++)
                                                         <td colspan="3" style="text-align:center"> 
                                                             <span><?php $amountDiff =  ($sumTotal[$i] - $minTotal );
-                                                             echo number_format($amountDiff,0,'',' ');?>
+                                                             echo number_format($amountDiff,2,',',' ');?>
                                                             </span>
                                                         </td>
                                                  @endfor
@@ -266,6 +314,9 @@
                                                     <td  colspan="3">
                                                         @if(!empty($post->replies[$j]->file))
                                                             {{ __("1 fichier") }} 
+                                                            <a href="{{ URL::to( 'uploads/' . $post->replies[$j]->file)  }}" download="{{ $post->replies[$j]->file}}">
+                                                                {{ $post->replies[$j]->file }} 
+                                                            </a>
                                                         @else
                                                             {{ __('Aucun fichier attaché') }}
                                                         @endif
@@ -316,7 +367,7 @@
                                             <th>{{ __('Description') }}</th>
                                             <th>{{ __('Quantité') }}</th>
                                             <th>{{ __('Unité') }}</th>
-                                            <th>{{ __('Prix unitaire') }}</th>
+                                            <th>{{ __('Prix unitaire') }} {{ $post->offer_in_device }}</th>
                                         </thead>
                                         <tbody>
                                             @foreach ($post->items as $k=>$item )
@@ -392,10 +443,14 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group {{ $errors->has('file') ? 'has-error' : ''}}">
                                     {{ Form::label('file',__("Fichier attaché")) }} 
                                     <input type="file" name="file" class="form-control">
-                                    
+                                    @if ($errors->has('file'))
+                                        <span class="help-block" role="alert">
+                                            <strong>{{ $errors->first('file') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div> 
                             <div class="col-md-6">

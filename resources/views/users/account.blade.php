@@ -21,9 +21,9 @@
                                     @endif
                                     <div style="display:inline-block">
                                         {{ $user->name }}
-                                        @if(Auth::user()->profile()->pluck('type')[0]=='acheteur')  
+                                        @if(Auth::User() && (Auth::User()->profile)  && (Auth::user()->profile()->pluck('type')[0]=='acheteur'))  
                                             <span style="display:block"><small>{{ __('Acheteur') }}</small></span>
-                                        @elseif(Auth::user()->profile()->pluck('type')[0]=='fournisseur')
+                                        @elseif(Auth::User() && (Auth::User()->profile)  && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
                                             <span style="display:block"><small>{{ __('Fournisseur') }}</small></span>
                                         @endif
                                     </div>
@@ -31,7 +31,7 @@
                             </h3>
                         </div>
                         <div class="col-md-7 col-xs-8 col-xxs-12">
-                            @if(Auth::user()->profile()->pluck('type')[0]=='fournisseur')
+                            @if(Auth::User() && (Auth::User()->profile) && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
                                 <div class="header-data text-center-xs">
                                     <div class="hdata">
                                         <div class="mcol-left">
@@ -229,7 +229,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            @if(Auth::user()->profile()->pluck('type')[0]=='fournisseur')
+                                            @if(Auth::User() && (Auth::User()->profile) && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
                                             <div class="col-md-6">
                                                 <label for="banner">  {{ __("Bannière") }} : </label>
                                                 <input type="file" name="banner">

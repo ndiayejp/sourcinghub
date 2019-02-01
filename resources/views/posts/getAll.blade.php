@@ -6,8 +6,19 @@
 <div class="h-spacer"></div>
 <div class="container">
     <div class="row">
-        @include('layouts/partials/_searchform') 
-        <div class="col-sm-8 page-content col-thin-left">
+        <div class="col-sm-3 page-sidebar mobile-filter-sidebar ">
+            <div id="sidebar" class="sidebar">
+                <div class="sidebar__inner slider">
+                    @foreach ($banners as $banner)
+                        <div class="item">
+                            <img src="{{URL::to('/')}}/banners/{{ $banner->image }}" class="img-responsive"><br><br>
+                        </div>
+                    @endforeach
+                </div>
+            </div> 
+        </div>
+        <div class="col-sm-9 page-content col-thin-left">
+            @include('layouts/partials/_searchform') 
             @if(isset($categoryName)) 
                 <h2>{{ $categoryName }}</h2> 
             @endif
@@ -59,7 +70,7 @@
                                             <div class="col-md-6 text-right">
                                                 <h5 class="company-title">
                                                     {{ __("Date de fermeture : ") }}
-                                                        <span class="label label-default">{{ $post->closing_date }}</span>
+                                                        <time style="color:#f27219">{{ \Carbon\Carbon::parse($post->closing_date)->format('d/m/Y')}}</time> 
                                                 </h5>
                                                 
                                             </div>
@@ -127,5 +138,7 @@
             minView: "month",
             format: "yyyy-mm-dd" 
         });
+        
+    });
     </script>
 @stop

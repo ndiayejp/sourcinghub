@@ -6,15 +6,19 @@ use Validator;
 use App\Tender;
 use App\ProductTender;
 use App\ProviderTender;
-use Illuminate\Http\Request;
+use App\ProviderReply;
+use App\User;
+use App\Notifications\InviteProviderNotify;
 use MercurySeries\Flashy\Flashy;
+use Carbon\Carbon;
+use Notify;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\InviteProviderNotify;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Notification;
-use App\ProviderReply;
+
 
 class TendersController extends Controller
 {
@@ -28,6 +32,10 @@ class TendersController extends Controller
      */
     public function index()
     {
+        if (!Auth::user()) {
+            Session::flash('error', __("Vous devez vous reconneter"));
+            return redirect()->route('login');
+        }
         $tenders = Tender::orderBy('created_at', 'desc')
             ->where('user_id',Auth::user()->id)
             ->paginate($this->limit);
@@ -111,7 +119,7 @@ class TendersController extends Controller
                 ->withErrors($validator)
                 ->withInput(); 
         }else{ 
-            $tender = new Tender;
+            $tender = new Tender();
             $tender->tender_date = $request->tender_date;
             $tender->name = $request->name;
             $tender->body = $request->body;
@@ -146,11 +154,15 @@ class TendersController extends Controller
                     }
                 }
 
-                $users = ProviderTender::where('tender_id',$tender->id)->get();
-                foreach ($users as $user) {
-                    Notification::route('mail', $user->email)
-                        ->notify(new InviteProviderNotify($tender));
-                }
+              
+                $admins = User::where('role_id',2)->get();
+                $users = ProviderTender::where('tender_id',$tender->id)
+                        ->get();
+
+                Notification::send($users, new InviteProviderNotify($tender));
+
+                Notification::send($admins, new InviteProviderNotify($tender)); 
+                 
                 Session::flash('success', __("Demande de quotation a bien été créé"));  
             } else {
                 Session::flash('error', __("La liste des fournisseurs ne peut etre vide"));
@@ -237,8 +249,15 @@ class TendersController extends Controller
         if (!Auth::user()) {
             Session::flash('error', __("Vous devez vous reconneter"));
             return redirect()->route('login');
-        } 
-        $tender = Tender::with(['products'])->findOrFail($id); 
+        }
+
+        
+        $tender = Tender::with(['products'])->findOrFail($id);
+
+        if ($tender->closing_datender_datete < date('Y-m-d H:i:s')) {
+            Session::flash('warning', __("Vous ne pouvez plus modifier la demande de devis la date de clôture étant dépassée "));
+            return redirect(route('tenders.index'));
+        }
 
         $products = ProductTender::where('tender_id', $id)->get();
 
@@ -355,8 +374,8 @@ class TendersController extends Controller
             return redirect()->route('login');
         } 
         $tender = Tender::findOrFail($id);
-        ProductTender::where('tender_id', $tender->id)->delete();
-        ProviderTender::where('tender_id',$tender->id)->delete();
+        ProductTender::where('tender_id', $id)->delete();
+        ProviderTender::where('tender_id',$id)->delete();
         $tender->delete();
         Session::flash('error', __("Demande supprimée"));
         return redirect()->route('tenders.index');

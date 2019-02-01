@@ -32,7 +32,7 @@ class NewPostNotify extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -52,6 +52,7 @@ class NewPostNotify extends Notification
                     ->line("Merci d'utiliser Sourcing Hub!");
     }
 
+    
     /**
      * Get the array representation of the notification.
      *
@@ -64,6 +65,11 @@ class NewPostNotify extends Notification
             //
             'name' => $this->post->name
         ];
+    }
+
+    public static function toText($data){
+        
+        return "Un nouvel appel d'offre a été publié".' '.$data['name'];
     }
 
     

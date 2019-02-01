@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                     </div>
-                    @if(Auth::user()->profile()->pluck('type')[0]=='acheteur') 
+                    @if(Auth::User() && (Auth::User()->profile)  && (Auth::user()->profile()->pluck('type')[0]=='acheteur'))
                         <div class="collapse-box">
                             <h5 class="collapse-title no-border">{{ __("Demandes") }}
                                 <a href="#requests" data-toggle="collapse" class="pull-right" aria-expanded="true"><i class="fa fa-angle-down"></i></a>
@@ -49,7 +49,7 @@
                         </h5>
                         <div class="panel-collapse collapse in" id="MyAds">
                             <ul class="acc-list"> 
-                                @if(Auth::user()->profile()->pluck('type')[0]=='fournisseur') 
+                                @if(Auth::User() && (Auth::User()->profile) && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
                                     <li><a href="{{ route('posts') }}"><i class="icon-th-list"></i> {{ __("Appels d'offre ") }}</a>
                                     </li>
                                     <li><a href="{{ route('archivedf') }}"> <i class="fa fa-archive"></i> {{ __('Archives') }}</a></li>
@@ -63,7 +63,7 @@
                                             </span>&nbsp;
                                         </a>
                                     </li>
-                                @elseif(Auth::user()->profile()->pluck('type')[0]=='acheteur')
+                                @elseif(Auth::User() && (Auth::User()->profile)  && (Auth::user()->profile()->pluck('type')[0]=='acheteur'))
                                     <li>
                                         <a href="{{ route('myposts') }}"><i class="fa fa-copy"></i> {{ __('Mes offres') }}</a>
                                     </li>

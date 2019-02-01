@@ -22,7 +22,7 @@
                     <div class="info-box bg-black">
                         <div class="icon"><i class="material-icons">playlist_add_check</i></div>
                         <div class="content">
-                            <a href="#" style="text-decoration:none">
+                            <a href="{{ route('admin.tender.index') }}" style="text-decoration:none">
                                 <div class="text">{{ __("Demandes de devis") }}</div>
                                 <div class="number"> {{ $tenders }}</div>
                             </a>
@@ -76,8 +76,10 @@
                 <div class="info-box bg-deep-purple">
                     <div class="icon"><i class="material-icons">fiber_new</i></div>
                     <div class="content">
-                        <div class="text">{{ __("NOUVEL UTILISATEUR") }}</div>
-                        <div class="number">{{ $new_authors_today }}</div>
+                        <a href="{{ route('admin.user.index') }}" style="text-decoration:none">
+                            <div class="text">{{ __("NOUVEL UTILISATEUR") }}</div>
+                            <div class="number">{{ $new_authors_today }}</div>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -47,7 +47,7 @@
                     </li>
                     <li class="{{ Request::is('admin/post*') ? 'active' : '' }}">
                         <a href="{{ route('admin.post.index') }}">
-                            <i class="material-icons">library_books</i>  <span>{{ __('Offres') }}</span>
+                            <i class="material-icons">library_books</i>  <span>{{ __("Appels d'Offres") }}</span>
                         </a>
                     </li>
                     <li class="{{ Request::is('admin/tender*') ? 'active' : '' }}">
@@ -85,6 +85,12 @@
                             <i class="material-icons">account_circle</i> <span>{{__("Utilisateurs")}}</span>
                         </a>
                     </li>
+                    <li class="{{ Request::is('admin/banner') ? 'active' : '' }}">
+                        <a href="{{ route('admin.banner.index') }}">
+                            <i class="material-icons">image</i> <span>{{__("Bannières")}}</span>
+                        </a>
+                    </li>
+
                     <li>
                         <a href="{{ route('admin.user.subscribers') }}">
                             <i class="material-icons">chat</i> <span>{{__("Mailings")}}</span>

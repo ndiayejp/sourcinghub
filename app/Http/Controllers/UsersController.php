@@ -56,7 +56,12 @@ class UsersController extends Controller
     public function store(Request $request){ 
         $profil = Profile::with(['user'])->findOrFail(Auth::user()->id);
         // Get validation rules
-        $this->validate($request,User::$rules);
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email|unique:users',
+            'password'=> 'required|string|min:6|confirmed'
+        ]);
+       
         $user = User::create([
             'name'              => $request['name'],
             'email'             => $request['email'],

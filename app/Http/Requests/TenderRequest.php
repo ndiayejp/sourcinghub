@@ -28,7 +28,7 @@ class TenderRequest extends FormRequest
             'product_unit.*' => 'required|min:1',
             'product_qte.*' => 'required|integer',
             'product_body.*' => 'required'
-       ]
+       ];
     }
 
     /**

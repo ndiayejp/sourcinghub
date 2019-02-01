@@ -33,6 +33,23 @@ jQuery(document).ready(function($){
 	});
 
 	$('[data-toggle="tooltip"]').tooltip();
+
+	$('.slider').slick({
+	    draggable: true,
+	    arrows: false,
+	    dots: false,
+	    fade: true,
+	    speed: 900,
+	    autoplay: true,
+	    infinite: true,
+	    cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
+	    touchThreshold: 100
+	})
+	$('[data-fancybox="gallery"]').fancybox({
+		// Options will go here
+	});
+ 
+	
 });
 
 

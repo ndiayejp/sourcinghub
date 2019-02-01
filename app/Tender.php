@@ -1,32 +1,38 @@
 <?php
 
 namespace App;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\{
+    Database\Eloquent\Model,
+    Notifications\Notifiable
+};
+ 
+
+
 
 class Tender extends Model
 {
-    
+
     use Notifiable;
 
     protected $fillable = [
-        'tender_date',
-        'name', 'body','type','offer_in_device'
+        'tender_date','name', 'body','type','offer_in_device'
     ];
 
     public function products(){
-        return $this->hasMany(ProductTender::class);
+        return $this->hasMany('App\ProductTender');
     }
 
     public function providers(){
-        return $this->hasMany(ProviderTender::class);
+        return $this->hasMany('App\ProviderTender');
     }
 
     public function deals(){
-        return $this->hasMany(ProviderReply::class);
+        return $this->hasMany('App\ProviderReply');
     } 
 
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+    
 }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ __('Bienvenue sur Canalsource') }}
+    {{ __('Bienvenue sur SourcingHub') }}
 @stop
 @section('content')
         <div class="wide-intro ">
@@ -34,7 +34,13 @@
         <div class="container"> 
             <div class="row">
                 <div class="col-md-3">
-                    <img src="{{URL::to('/')}}/img/banner.png" class="img-responsive">
+                   <div class="slider">
+                        @foreach ($banners as $banner)
+                            <div class="item">
+                                <img src="{{URL::to('/')}}/banners/{{ $banner->image }}" class="img-responsive"><br><br>
+                            </div>
+                        @endforeach
+                   </div>
                 </div>
                 <div class="col-md-9">
                         @if(!Auth::user())
@@ -102,12 +108,15 @@
                                                                             </h4>
                                                                             <span class="info-row">
                                                                                 <span class="date">
-                                                                                    <i class="fa fa-map-marker"></i><small>{{ $post->country->name }}</small>
+                                                                                    <i class="fa fa-map-marker"></i><small> {{ $post->country->name }}</small>
                                                                                 </span>
                                                                                 <span class="date">
                                                                                     <i class="icon-clock"> </i>
                                                                                     <small>{{ $post->created_at->diffForHumans() }}</small>
                                                                                 </span>  
+                                                                                <span class="date pull-right">
+                                                                                    <small>{{ __("Date de clôture: ") }} <time style="color:#f27219">{{ \Carbon\Carbon::parse($post->closing_date)->format('d/m/Y')}}</time> </small>
+                                                                                </span>
                                                                             </span>         
                                                                             <div class="jobs-action">
                                                                                 @guest
@@ -162,6 +171,11 @@
                                                         </div>
                                                     @endforeach 
                                                 </div>
+                                                <div class="text-center">
+                                                    <a href="" class="" style="margin:10px 0; display:block">
+                                                        <i class="icon-th-list"></i> {{ __("Touts les fournisseurs") }}
+                                                    </a>
+                                                </div>
                                         </div>
                                 </div>
                         </div>
@@ -172,6 +186,9 @@
 @stop
 
 
-
- 
-        
+@section('script')
+ <script>
+       
+ </script>
+            
+@stop

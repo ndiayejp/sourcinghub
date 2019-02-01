@@ -22,19 +22,11 @@
     </div>  
 </div>
 <input type="hidden" name="type" value="rfqe">
- <div class="form-group {{ $errors->has('offer_in_device') ? 'has-error' : ''}}">
-    {{Form::label('offer_in_device', __("Offres à faire en"))}} <sup>*</sup>
-    {{  Form::select('offer_in_device', ['XOF' => __('XOF'), 'Euro' => 'Euro','Dollar'=>'Dollar'],null,['class' => 'form-control select','placeholder'=>'Choisissez une devise']) }}
-    @if ($errors->has('offer_in_device'))
-        <span class="help-block" role="alert">
-            <strong>{{ $errors->first('offer_in_device') }}</strong>
-        </span>
-    @endif
-</div>
+  
 <div class="row">
     <div class="col-sm-12">
         <div class="form-group {{ $errors->has('body') ? 'has-error' : ''}}">
-            <label>Description</label>
+            <label>{{ __('Description') }}</label>
              <input type="hidden" name="type" value="rq">
             <textarea class="form-control textarea-wysiwyg" name="body"></textarea>
          </div>

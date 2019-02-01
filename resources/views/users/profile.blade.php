@@ -19,26 +19,14 @@
                                             <img class="img-responsive" src="{{ URL::to('/') }}/img/profile/{{ $profile->image }}" width="90px" height="100%">
                                             @endif
                                         </li> 
+                                        <li><p class="no-margin"> <strong>{{ __('Adresse') }}: </strong>&nbsp;  {{ $profile->address }}</p> </li> 
+                                        <li><p class="no-margin"> <strong>{{ __('Téléphone') }}:</strong>&nbsp;  {{ $profile->phone }}</p></li> 
+                                        <li><p class="no-margin"> <strong>{{ __('Email') }}: </strong>&nbsp;  {{ $profile->user->email }}</p></li> 
+                                        <li><p class="no-margin"> <strong>{{ __('Pays') }}: </strong>&nbsp;  {{ $profile->country->name }}</p></li> 
+                                        <li><p class="no-margin"> <strong>{{ __("Secteur d'activité") }}: </strong>&nbsp;  {{ $profile->category->name }} </p></li> 
+                                        <li><p class="no-margin"> <strong>{{ __("Fonction") }}: </strong>&nbsp;  {{ $profile->activity->name }} </p></li> 
                                         <li>
-                                            <p class="no-margin"> <strong>{{ __('Adresse') }}: </strong>&nbsp;  {{ $profile->address }}</p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __('Téléphone') }}:</strong>&nbsp;  {{ $profile->phone }}</p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __('Pays') }}: </strong>&nbsp;  {{ $profile->country->name }}</p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __('Pays') }}: </strong>&nbsp;  {{ $profile->country->name }}</p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __("Secteur d'activité") }}: </strong>&nbsp;  {{ $profile->category->name }} </p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __("Fonction") }}: </strong>&nbsp;  {{ $profile->activity->name }} </p>
-                                        </li> 
-                                        <li>
-                                            <p class="no-margin"> <strong>{{ __("Taille de l'entreprise") }}:</strong>
+                                            <p class="no-margin"><strong>{{ __("Taille de l'entreprise") }}:</strong>
                                                 @if($profile->firmsize==1)
                                                    {{ __("0-9") }}
                                                 @elseif($profile->firmsize==2)
@@ -53,8 +41,8 @@
                                             </p>
                                         </li> 
                                         @if(!empty($profile->website))
-                                            <p class="no-margin"> <strong>{{ __("Site web") }}:
-                                                </strong>&nbsp;  <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a>
+                                            <p class="no-margin"> <strong>{{ __("Site web: ") }}</strong>
+                                            <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a>
                                             </p>
                                         @endif
                                             
@@ -64,9 +52,7 @@
                         <div class="col-md-9">
                                 <div class="panel panel-default">
                                         <div class="panel-heading" role="tab" id="headingThree">
-                                            <h4 class="panel-title">
-                                                {{ $profile->company }}
-                                            </h4>
+                                            <h4 class="panel-title">{{ $profile->company }}</h4>
                                         </div>
                                         <div class="panel-body">
                                                 {!! $profile->about !!}
@@ -74,7 +60,9 @@
                                                    <div class="row">
                                                         @foreach($galleries as $img)
                                                             <div class="col-md-4">
-                                                                <img src="{{ URL::to('/') }}/storage/gallery/thumbnail/{{ $img->name }}" style="height:auto;width:100%">
+                                                                <a href="{{ URL::to('/') }}/storage/gallery/{{ $img->name }}" data-fancybox="gallery">
+                                                                    <img src="{{ URL::to('/') }}/storage/gallery/thumbnail/{{ $img->name }}" style="height:auto;width:100%" >
+                                                                </a>
                                                             </div>
                                                         @endforeach
                                                    </div>
@@ -90,8 +78,6 @@
                                                         </div>
                                                     </form>
                                                 @endif
-
-                                                
                                 </div>
                         </div>
                     </div>

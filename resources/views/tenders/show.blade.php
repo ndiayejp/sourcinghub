@@ -55,8 +55,8 @@
                                         <td>{{ $v['unit']  }}</td> 
                                         <?php $i = 0;$temp = 0;?>
                                         @foreach ($v->deals as $kk=>$vv ) 
-                                            <td id="ItemPrice">{{ $vv['price'] }}</td> 
-                                            <td class="Totalprice"  id="Totalprice-{{ $k }}-{{ $kk }}">{{  $vv['price']* $v['qte']}}</td> 
+                                            <td id="ItemPrice">{{ number_format($vv['price'],'2',',','.') }}</td> 
+                                            <td class="Totalprice"  id="Totalprice-{{ $k }}-{{ $kk }}">{{ number_format($vv['price']* $v['qte'],'2',',','.')}}</td> 
                                             <?php  
                                             $sum[$i] +=   $vv['price']* $v['qte'] ;  
                                             $i++; $cpt++; ?>
@@ -67,7 +67,7 @@
                                 <tr class="grandTotal">
                                     <td colspan="4" style="text-align:left;background-color:#D1D1D1;">{{ __("Total des Articles") }}</td>
                                     @for ($i =0 ; $i <sizeof($sum) ; $i++)
-                                        <td colspan="2"  id="totalSum-{{$i}}"  class="totalSum" style="text-align:center">   {{number_format( $sum[$i],0, '', ' ') }}</td>
+                                        <td colspan="2"  id="totalSum-{{$i}}"  class="totalSum" style="text-align:center">   {{ number_format( $sum[$i],2, ',', '.') }}</td>
                                     @endfor    
                                 </tr>
                                 <tr class="row10">

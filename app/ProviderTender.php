@@ -3,10 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate \Notifications\Notifiable;
+
+ 
 
 class ProviderTender extends Model
 {
     //
+
+    use Notifiable;
 
     protected $fillable = [
         'email'

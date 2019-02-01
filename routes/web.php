@@ -109,6 +109,9 @@ Route::group(['middleware'=>['auth']], function (){
     Route::post('profile/{id}','ProfilesController@store')->name('profile.store');
 
     Route::get('customers','UsersController@getCustomers')->name('customers');
+
+    Route::resource('notifications', 'NotificationsController', ['only' => 'show']);
+
 });
  
 Route::group(['as'=>'admin.','prefix'=>'admin','namespace'=>'admin','middleware'=>['auth'=>'admin']],function(){
@@ -123,7 +126,8 @@ Route::group(['as'=>'admin.','prefix'=>'admin','namespace'=>'admin','middleware'
     Route::resource('post','PostController');
     Route::resource('tender','TenderController');
     Route::resource('incoterm','IncotermController');
-
+    Route::resource('banner','BannersController');
+ 
     Route::get('post/{slug}','PostController@show')->name('post.show');
 
     Route::get('/subscribers', 'UserController@subscribers')->name('user.subscribers');

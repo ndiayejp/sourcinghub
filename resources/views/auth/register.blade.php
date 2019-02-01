@@ -142,7 +142,7 @@
                                            </div>
                                            <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('phone') ? 'has-error' : ''}}">
-                                                     {!!  Form::text('phone',null, ['class' => 'form-control','placeholder'=>__("Téléphone*")]) !!}  
+                                                     {!!  Form::text('phone',null, ['class' => 'form-control','id'=>'phone','placeholder'=>__("Téléphone*")]) !!}  
                                                     @if ($errors->has('phone'))
                                                         <span class="help-block" role="alert">
                                                             <strong>{{ $errors->first('phone') }}</strong>
@@ -199,6 +199,11 @@
 
 @section('script')
     <script> 
-        $('.select').select2(); 
+        $('.select').select2();
+        $("#phone").intlTelInput({
+            preferredCountries: [ "us", "gb","fr","sn" ], 
+            nationalMode: false
+        });
+ 
     </script>
 @stop

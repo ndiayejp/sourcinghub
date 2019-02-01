@@ -11,6 +11,7 @@ class RegisteredUser extends Notification
 {
     use Queueable;
 
+
     /**
      * Create a new notification instance.
      *
@@ -19,7 +20,7 @@ class RegisteredUser extends Notification
     public function __construct()
     {
         //
-    }
+     }
 
     /**
      * Get the notification's delivery channels.
@@ -61,6 +62,9 @@ class RegisteredUser extends Notification
     {
         return [
             //
+            
         ];
     }
+
+   
 }

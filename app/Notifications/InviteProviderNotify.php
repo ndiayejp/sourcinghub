@@ -9,18 +9,18 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class InviteProviderNotify extends Notification
+class InviteProviderNotify extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $tender;
+    private $tender;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($tender)
+    public function __construct(Tender $tender)
     {
         //
         $this->tender = $tender;
@@ -34,7 +34,7 @@ class InviteProviderNotify extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -48,12 +48,13 @@ class InviteProviderNotify extends Notification
  
         return (new MailMessage)
                     ->success()
-                    ->subject(__("Nouvelle demande de quotation"))
-                    ->line(__("Vous êtes invité à répondre à la demande de quotation."))
+                    ->subject(__("Nouvelle demande de devis"))
+                    ->line(__("Vous êtes invité à répondre à la demande de devis."))
                     ->line('Titre de la demande : ' . $this->tender->name)
                     ->action("Voir la demande", url('/'))
                     ->line("Merci d'utiliser Sourcing Hub!");
     }
+
 
     /**
      * Get the array representation of the notification.
@@ -66,7 +67,10 @@ class InviteProviderNotify extends Notification
         return [
             //
             'name' => $this->tender->name
-             
         ];
+    }
+    public static function toText($data)
+    {
+        return "Une nouvelle demande de devis a  été publiée".' '.$data['name'];
     }
 }

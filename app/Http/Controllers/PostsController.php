@@ -16,6 +16,7 @@ use App\Category;
 use App\Area;
 use App\Incoterm;
 use App\Proposal;
+use App\Banner;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MercurySeries\Flashy\Flashy;
@@ -257,10 +258,14 @@ class PostsController extends Controller
             ->where('posts.active',1) ;
             
         }])->get();
+
+        $banners = Banner::Published()
+            ->IsValid(Carbon::now()->format('Y-m-d'))
+            ->get();
        
         return view('posts.getAll',compact('posts','categories',
             'allareas','allcats','allopens',
-        'Allcountries'));
+        'Allcountries', 'banners'));
     }
 
     /**
@@ -359,7 +364,10 @@ class PostsController extends Controller
         $post->opens()->sync($request->opens,false);
         $users = User::whereHas('profile', function($q){
             $q->where('type', 'fournisseur');
-        })->get();
+        })
+        ->orwhere('role_id',2)
+        ->get();
+        
         Notification::send($users, new NewPostNotify($post));
         Session::flash('success',__("Appel d'Offre a bien été créé"));
         return  redirect()->route('posts.create');
@@ -619,15 +627,17 @@ class PostsController extends Controller
                 'payment'       =>'required',
                 'amount'        =>'required',
                 'delivery'      =>'required',
-                'body'          =>'required'
+                'body'          =>'required',
+                'file'          =>'max:8000'
             ];
     
             $messages = [ 
                 'incoterm_id.required'   =>"L'incoterm est obligatoire ! ",
-                'payment.required'=>"Sélectionnez une méthode de paiement!",
-                'amount.required'         =>"Côut du transport, vous pouvez mettre 0 s'il ya pas de frais",
+                'payment.required'       =>"Sélectionnez une méthode de paiement!",
+                'amount.required'        =>"Côut du transport, vous pouvez mettre 0 s'il ya pas de frais",
                 'delivery.required'      =>"Date de livraison est obligatoire",
-                'body.required'          =>"Un commentaire est obligatoire pour finaliser votre offre"
+                'body.required'          =>"Un commentaire est obligatoire pour finaliser votre offre",
+                'file.uploaded'=>'la taille du fichier est trop grande'
             ];
     
             foreach($request['price'] as $key => $val)
@@ -653,7 +663,7 @@ class PostsController extends Controller
                 } 
                 if($request->hasFile('file')){ 
                     $allowedfileExtension=['pdf','jpg','png','docx','rtf','xlsx']; 
-                    $files = $request->file('file');  
+                    $file = $request->file('file');  
                     $filename = $file->getClientOriginalName();  
                     $extension = $file->getClientOriginalExtension(); 
                     $filesize = $file->getClientSize(); 

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <meta name="csrf-token" content="{{ csrf_token() }}"> 
-    <title>@yield('title','Bienvenue sur Sourcing Hub')</title>  
+    <title>@yield('title','Sourcing Hub | entre acheteurs et fournisseurs')</title>  
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700' rel='stylesheet'>
 
@@ -36,6 +36,9 @@
     <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/multiple-emails.css') }}" rel="stylesheet" > 
     <link href="{{ asset('css/star-rating.min.css') }}" rel="stylesheet"  />
+    <link href="{{ asset('css/intlTelInput.min.css') }}" rel="stylesheet"  />
+    <link href="{{ asset('css/slick.min.css') }}" rel="stylesheet"  />
+    <link href="{{ asset('css/jquery.fancybox.min.css') }}" rel="stylesheet"  />
     
 
 </head>
@@ -57,7 +60,11 @@
         <script src="{{ asset('js/toastr.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/star-rating.min.js') }}"></script>
-        <script>
+        <script src="{{ asset('js/intlTelInput-jquery.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
+        <script src="{{ asset('js/slick.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.fancybox.min.js') }}"></script>
+          <script>
             toastr.options = {
                 "closeButton"      : true,
                 "debug"            : false,

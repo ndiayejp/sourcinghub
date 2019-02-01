@@ -6,6 +6,7 @@ use App\Post;
 use App\Company;
 use App\Category;
 use App\User;
+use App\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Contracts\Auth\Guard;
@@ -53,8 +54,12 @@ class PagesController extends Controller
             ->with('Profile')
             ->limit(6)
             ->get();
-        //dd($featuredProviders);
-        return view('pages.home',compact('posts','companies','nbPosts', 'featuredProviders'));
+        
+        $banners = Banner::Published()
+        ->IsValid(Carbon::now()->format('Y-m-d'))
+        ->get();
+         
+        return view('pages.home',compact('posts','companies','nbPosts', 'featuredProviders', 'banners'));
 
         
          
