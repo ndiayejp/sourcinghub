@@ -31,9 +31,9 @@
                         <div class="panel-body">
                             <ul class="list-unstyled">
                                 <li><b>{{ __("Identification") }}</b> {{ $tender->user->firstname.' '.$tender->user->lastname }}</li>
-                                <li><b>{{ __("Téléphone") }}</b>{{ Auth::user()->profile()->pluck('phone')[0] }}</li>
-                                <li><b>{{ __("Adresse") }}</b>{{ Auth::user()->profile()->pluck('address')[0] }}</li>
-                                <li><b>{{ __("Email") }}</b>{{ $tender->user->email }}</li>
+                                <li><b>{{ __("Téléphone") }}</b> {{ $tender->user->profile()->pluck('phone')[0] }}</li>
+                                <li><b>{{ __("Adresse") }}</b> {{ $tender->user->profile()->pluck('address')[0] }}</li>
+                                <li><b>{{ __("Email") }}</b> {{ $tender->user->email }}</li>
                             </ul>
                         </div>
                     </div>

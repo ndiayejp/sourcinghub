@@ -55,8 +55,7 @@
                                                 </div> 
                                                 <div class="iconbox-wrap-text text-center">
                                                     <h3 class="blue-color">
-                                                        {{ __('Je suis un ') }} 
-                                                        <span>{{ __('fournisseur') }}</span>
+                                                        {{ __('Je suis un fournisseur') }}  
                                                     </h3>
                                                     <span>
                                                         {{ __("Rechechez, trouvez et répondez aux appels d'offres dans votre secteur d'activité") }} <br>
@@ -75,7 +74,7 @@
                                                         </h5>
                                                     </div> 
                                                     <div class="iconbox-wrap-text text-center">
-                                                        <h3 class="green-color ">{{ __('Je suis ') }}<span> {{ __('un acheteur') }}</span></h3>
+                                                        <h3 class="green-color ">{{ __('Je suis un acheteur') }} </h3>
                                                         <span>{{ __("Réceptionnez des offres compétitives") }} <br>
                                                             {{ __('Constituez vous un panel de fournisseur') }} <br>
                                                             {{ __("Gains de temps et d'argent") }}
@@ -89,95 +88,94 @@
                         <div class="h-spacer"></div>
                         @endif 
                         <div class="row">
-                                <div class="col-md-6">
-                                        <div class="content-box col-lg-12 layout-section">
-                                                <div class="row row-featured row-featured-category">
-                                                    <div class="col-lg-12 box-title no-border">
-                                                        <div class="inner">
-                                                            <h2> <span class="title-3">{{ __('Derniers') }} <span style="font-weight: bold;">{{ __('Appels doffres') }}</span></span></h2>
+                            <div class="col-md-12">
+                                <div class="content-box col-lg-12 layout-section">
+                                    <div class="row row-featured row-featured-category">
+                                        <div class="col-lg-12 box-title no-border">
+                                            <div class="inner">
+                                                <h2><span class="title-3">{{ __('Derniers Appels doffres') }}  </span></h2>
+                                            </div>
+                                        </div>
+                                        <div class="last-post"> 
+                                            @foreach ($posts as $post)  
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6  add-desc-box">
+                                                    <div class="add-details jobs-item" style="margin-top:20px;">
+                                                        <h4 class="job-title">
+                                                            <a href="{{ url("/offre/".$post->slug) }}"> {{ strlen($post->name) > 100 ? substr($post->name,0,60).'...' : $post->name }} </a>
+                                                            <span style="display:block">{{__("N° appel d'offre:")}} {{'AO'.'-'.$post->id.'-'.Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->year }}</span>
+                                                        </h4>
+                                                        <span class="info-row">
+                                                            <span class="date">
+                                                                <i class="fa fa-map-marker"></i><small> {{ $post->country->name }}</small>
+                                                            </span>
+                                                            <span class="date">
+                                                                <i class="icon-clock"> </i>
+                                                                <small>{{ $post->created_at->diffForHumans() }}</small>
+                                                            </span>  
+                                                            <span class="date pull-right">
+                                                                <small>{{ __("Date de clôture: ") }} <time style="color:#f27219">{{ \Carbon\Carbon::parse($post->closing_date)->format('d/m/Y')}}</time> </small>
+                                                            </span>
+                                                        </span>         
+                                                        <div class="jobs-action">
+                                                            @guest
+                                                                <ul class="list-inline">
+                                                                    <li><a href="javascript:void(0);" onclick="toastr.info('To add favorite list. You need to login first.','Info',{
+                                                                        closeButton: true,
+                                                                        progressBar: true,})"><i class="fa fa-heart"></i> {{ $post->favorite_to_users->count() }}</a>
+                                                                    </li>
+                                                                    <li><i class="fa fa-eye"></i> {{ $post->view_count }}</li>
+                                                                </ul>
+                                                            @else
+                                                                <ul class="list-inline">
+                                                                    <li>
+                                                                        <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{ $post->id }}').submit();"class="{{ !Auth::user()->favorite_posts->where('pivot.post_id',$post->id)->count()  == 0 ? 'favorite_posts' : ''}}"> <i class="fa fa-heart"></i>{{ $post->favorite_to_users->count() }}</a> 
+                                                                        <form id="favorite-form-{{ $post->id }}" method="POST" action="{{ route('post.favorite',$post->id) }}" style="display: none;">
+                                                                            @csrf
+                                                                        </form>
+                                                                    </li>
+                                                                    <li><i class="fa fa-eye"></i> {{ $post->view_count }}</li>
+                                                                </ul>
+                                                            @endguest
                                                         </div>
                                                     </div>
-                                                    @foreach ($posts as $post)  
-                                                        <div class="adds-wrapper jobs-list">
-                                                                <div class="item-list job-item">
-                                                                    <div class="col-sm-12 col-xs-12  add-desc-box">
-                                                                        <div class="add-details jobs-item">
-                                                                            <h4 class="job-title">
-                                                                                <a href="{{ url("/offre/".$post->slug) }}"> {{ strlen($post->name) > 100 ? substr($post->name,0,60).'...' : $post->name }} </a>
-                                                                                <span style="display:block">{{__("N° appel d'offre:")}} {{'AO'.'-'.$post->id.'-'.Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->year }}</span>
-                                                                            </h4>
-                                                                            <span class="info-row">
-                                                                                <span class="date">
-                                                                                    <i class="fa fa-map-marker"></i><small> {{ $post->country->name }}</small>
-                                                                                </span>
-                                                                                <span class="date">
-                                                                                    <i class="icon-clock"> </i>
-                                                                                    <small>{{ $post->created_at->diffForHumans() }}</small>
-                                                                                </span>  
-                                                                                <span class="date pull-right">
-                                                                                    <small>{{ __("Date de clôture: ") }} <time style="color:#f27219">{{ \Carbon\Carbon::parse($post->closing_date)->format('d/m/Y')}}</time> </small>
-                                                                                </span>
-                                                                            </span>         
-                                                                            <div class="jobs-action">
-                                                                                @guest
-                                                                                    <ul class="list-inline">
-                                                                                        <li><a href="javascript:void(0);" onclick="toastr.info('To add favorite list. You need to login first.','Info',{
-                                                                                            closeButton: true,
-                                                                                            progressBar: true,})"><i class="fa fa-heart"></i> {{ $post->favorite_to_users->count() }}</a>
-                                                                                        </li>
-                                                                                        <li><i class="fa fa-eye"></i> {{ $post->view_count }}</li>
-                                                                                    </ul>
-                                                                                @else
-                                                                                    <ul class="list-inline">
-                                                                                        <li>
-                                                                                            <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{ $post->id }}').submit();"class="{{ !Auth::user()->favorite_posts->where('pivot.post_id',$post->id)->count()  == 0 ? 'favorite_posts' : ''}}"> <i class="fa fa-heart"></i>{{ $post->favorite_to_users->count() }}</a> 
-                                                                                            <form id="favorite-form-{{ $post->id }}" method="POST" action="{{ route('post.favorite',$post->id) }}" style="display: none;">
-                                                                                                @csrf
-                                                                                            </form>
-                                                                                        </li>
-                                                                                        <li><i class="fa fa-eye"></i> {{ $post->view_count }}</li>
-                                                                                    </ul>
-                                                                                @endguest
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>  
-                                                                </div> 
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                                <div class="text-center">
-                                                    <a href="{{ route('posts') }}" class="" style="margin:10px 0; display:block">
-                                                        <i class="icon-th-list"></i> {{ __("Toutes les offres") }}
-                                                    </a>
-                                                </div>
+                                                </div>   
+                                            @endforeach
                                         </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <a href="{{ route('posts') }}" style="margin:10px 0; display:block">
+                                            <i class="icon-th-list"></i> {{ __("Toutes les offres") }}
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                        <div class="content-box col-lg-12 layout-section">
-                                                <div class="row row-featured row-featured-category">
-                                                    <div class="col-lg-12 box-title no-border">
-                                                        <div class="inner"><h2 class="text-center"> <span class="title-3">{{ __('Fournisseurs') }}  </span> </h2></div>
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-md-12">
+                                <div class="content-box col-lg-12 layout-section">
+                                        <div class="row row-featured">
+                                            <div class="col-lg-12 box-title no-border">
+                                                <div class="inner"><h2 class="text-center"> <span class="title-3">{{ __('Fournisseurs') }}  </span> </h2></div>
+                                            </div>
+                                            <div class="featured-p">
+                                                @foreach ($featuredProviders as $provider )
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 f-category">
+                                                        <a href="{{ route('profile',[str_slug($provider->profile->company),$provider->profile->user_id]) }}">
+                                                            @if($provider->profile->image=="noimage.jpg")
+                                                                <img src="{{ url('img') }}/noimage.jpg" class="img-responsive">
+                                                            @else 
+                                                                <img src="{{URL::to('/')}}/img/profile/{{ $provider->profile->image }}" class="img-responsive">
+                                                            @endif
+                                                            <h6><span class="company-name"> {{ $provider->profile->company }}</span></h6>
+                                                        </a>
                                                     </div>
-                                                    @foreach ($featuredProviders as $provider )
-                                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 f-category">
-                                                            <a href="{{ route('profile',[str_slug($provider->profile->company),$provider->profile->user_id]) }}">
-                                                                @if($provider->profile->image=="noimage.jpg")
-                                                                    <img src="{{ url('img') }}/noimage.jpg" class="img-responsive">
-                                                                @else 
-                                                                    <img src="{{URL::to('/')}}/img/profile/{{ $provider->profile->image }}" class="img-responsive">
-                                                                @endif
-                                                                <h6><span class="company-name"> {{ $provider->profile->company }}</span></h6>
-                                                            </a>
-                                                        </div>
-                                                    @endforeach 
-                                                </div>
-                                                <div class="text-center">
-                                                    <a href="" class="" style="margin:10px 0; display:block">
-                                                        <i class="icon-th-list"></i> {{ __("Touts les fournisseurs") }}
-                                                    </a>
-                                                </div>
+                                                @endforeach 
+                                            </div>
+                                            
                                         </div>
+                                        
                                 </div>
+                            </div>
                         </div>
                 </div> 
             </div>

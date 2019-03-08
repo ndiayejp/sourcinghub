@@ -31,7 +31,7 @@
                                         @for ( $j = 0 ; ($j < $deals)&&($i==0) ; $j++ ) 
                                             <td class="style4" colspan="2">
                                                 <h4 style="text-transform:uppercase">{{ $tender->products[$i]->deals[$j]->user->profile['company'] }} </h4>
-                                                 <small>{{ $tender->products[$i]->deals[$j]->user->email}}</small>  <br>
+                                                <small>{{ $tender->products[$i]->deals[$j]->user->email}}</small>  <br>
                                                 <small>{{ $tender->products[$i]->deals[$j]->user->profile['phone']}}</small>
                                             </td>
                                         @endfor 
@@ -60,7 +60,6 @@
                                             <?php  
                                             $sum[$i] +=   $vv['price']* $v['qte'] ;  
                                             $i++; $cpt++; ?>
-                                            
                                         @endforeach
                                     </tr> 
                                 @endforeach

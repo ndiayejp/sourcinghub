@@ -55,19 +55,25 @@
                                             <h4 class="panel-title">{{ $profile->company }}</h4>
                                         </div>
                                         <div class="panel-body">
-                                                {!! $profile->about !!}
-                                                @if($galleries->count()>0)
-                                                   <div class="row">
-                                                        @foreach($galleries as $img)
-                                                            <div class="col-md-4">
-                                                                <a href="{{ URL::to('/') }}/storage/gallery/{{ $img->name }}" data-fancybox="gallery">
-                                                                    <img src="{{ URL::to('/') }}/storage/gallery/thumbnail/{{ $img->name }}" style="height:auto;width:100%" >
-                                                                </a>
-                                                            </div>
-                                                        @endforeach
-                                                   </div>
-                                                   <hr>
-                                                @endif
+                                                <div class="text-center">
+                                                    <img class="img-responsive" src="{{ URL::to('/') }}/img/profile/{{ $profile->image }}"  >
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        {!! $profile->about !!}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        @if($galleries->count()>0) 
+                                                            @foreach($galleries as $img) 
+                                                                <a href="{{ URL::to('/img/galleries') }}/{{ $img->name }}" data-fancybox="gallery">
+                                                                    <img src="{{ URL::to('/img/galleries/'.$img->name) }}" style="height:auto;width:100%;margin:5px 0;" >
+                                                                </a> 
+                                                            @endforeach 
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                
                                                 @if(Auth::user()->profile()->pluck('type')[0]=="acheteur")
                                                     <form method="POST" action="{{ route('profile.store',$profile->user_id) }}">
                                                         {{ csrf_field() }}   

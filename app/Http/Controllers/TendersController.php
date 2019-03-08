@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
+use App\Notifications\TenderReply;
 use Illuminate\Support\Facades\Notification;
 
 
@@ -156,10 +157,13 @@ class TendersController extends Controller
 
               
                 $admins = User::where('role_id',2)->get();
-                $users = ProviderTender::where('tender_id',$tender->id)
+                $getusers = ProviderTender::where('tender_id',$tender->id)
                         ->get();
 
-                Notification::send($users, new InviteProviderNotify($tender));
+                foreach($getusers as $user){
+                   $users =  User::where('email',$user->email)->get();
+                    Notification::send($users, new InviteProviderNotify($tender));
+                } 
 
                 Notification::send($admins, new InviteProviderNotify($tender)); 
                  
@@ -254,7 +258,7 @@ class TendersController extends Controller
         
         $tender = Tender::with(['products'])->findOrFail($id);
 
-        if ($tender->closing_datender_datete < date('Y-m-d H:i:s')) {
+        if ($tender->tender_date < date('Y-m-d H:i:s')) {
             Session::flash('warning', __("Vous ne pouvez plus modifier la demande de devis la date de clôture étant dépassée "));
             return redirect(route('tenders.index'));
         }
@@ -388,55 +392,55 @@ class TendersController extends Controller
     */
     public function reply(Request $request, $id){
         if ($request->has('sendQuotation')) {
-            $rules = [
-                'delivery' => 'required',
-            ];
-            $messages =  [
-                'delivery.required'=>'Le champ délai de livraison est obligatoire',
-            ];  
+
+            $rules = [ 'delivery' => 'required'];
+            $messages =  [ 'delivery.required'=>'Le champ délai de livraison est obligatoire'];  
+
             foreach ($request['price'] as $key => $val) {
-                $rules['price.' . $key] = 'required';
-                $messages['price.' . $key . '.required'] = 'Le "Prix unitaire ' . $key . '" est obligatoire.';
+               $rules['price.' . $key] = 'required';
+               $messages['price.' . $key . '.required'] = 'Le "Prix unitaire ' . $key . '" est obligatoire.';
             }
+
             $validator = Validator::make($request->all(), $rules, $messages);
 
             if ($validator->fails()) {
-                return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-            } else {
+               return redirect()->back()->withErrors($validator)->withInput();
+            } 
+            else {
                 if ($request->hasFile('file')) {
                     $allowedfileExtension = ['pdf', 'jpg', 'png', 'docx', 'rtf', 'xlsx'];
                     $file = $request->file('file');
-                        $filename = $file->getClientOriginalName();
-                        $extension = $file->getClientOriginalExtension();
-                        $filesize = $file->getClientSize();
-                        $check = in_array($extension, $allowedfileExtension);
-                        if ($check) {
-                            $file->move(public_path() . '/uploads/', $filename); 
-                        } else {
-                            Session::flash('error', __("Extension de fichier non autorisée"));
-                            return redirect()->back()->withInput();
-                        }
+                    $filename = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    $filesize = $file->getClientSize();
+                    $check = in_array($extension, $allowedfileExtension);
+                    if ($check) {
+                      $file->move(public_path() . '/uploads/', $filename); 
+                    } else {
+                      Session::flash('error', __("Extension de fichier non autorisée"));
+                      return redirect()->back()->withInput();
+                    }
                 }
                 else{
                     $filename = "";
                 }
                 foreach ($request->item_id as $key => $v) {
                     ProviderReply::create([ 
-                        'tender_id' => $request->tender_id,
-                        'user_id' => $request->user_id,
-                        'body'=>$request->body,
-                        'file' => $filename,
-                        'delivery'=>$request->delivery,
-                        'price' => $request->price[$key],
+                        'tender_id'  => $request->tender_id,
+                        'user_id'    => $request->user_id,
+                        'body'       => $request->body,
+                        'file'       => $filename,
+                        'delivery'   => $request->delivery,
+                        'price'      => $request->price[$key],
                         'product_id' => $request->item_id[$key], 
                     ]);
                 }
+                $tender = Tender::findOrFail($request->tender_id);
+                $user = User::findOrFail($tender->user_id);
+                Notification::send($user, new TenderReply($tender));
                 DB::table('tenders')->where('id', $request->tender_id)->increment('replies');
                 Session::flash('success', __("Votre offre a bien été transmis"));
-                return redirect()->route('tenders.index'); 
+                return redirect()->route('quotations'); 
             }
         }
     }

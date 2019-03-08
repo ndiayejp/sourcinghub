@@ -75,6 +75,14 @@ class PostsController extends Controller
                     ->where('posts.user_id', Auth::user()->id)
                     ->orderBy('created_at', 'desc')
                     ->paginate($this->limit);
+                    
+            foreach($posts as $post){
+               if($post->closing_date < Carbon::now()){
+                    
+                    $post->update(array('state_id'=>2));
+                }
+            }
+                     
         }
 
         return view('posts.index',compact('posts'));
@@ -382,8 +390,7 @@ class PostsController extends Controller
     public function show($slug)
     {
         Carbon::setLocale(config('app.locale'));
-        $post = Post::Published()
-               ->where('slug',$slug)
+        $post = Post::where('slug',$slug)
                ->with(['items'=>function($query){
                    $query->with(['Proposals'=>function($q){
                        $q->with(['User'=>function($qq){
@@ -611,6 +618,7 @@ class PostsController extends Controller
         Carbon::setLocale(config('app.locale'));
         $posts = Auth::user()
                 ->favorite_posts() 
+                ->where('state_id',1)
                 ->simplePaginate($this->limit);
         return view('posts.favourite',compact('posts'));       
     }

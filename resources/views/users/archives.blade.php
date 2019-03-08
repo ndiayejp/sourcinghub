@@ -34,7 +34,7 @@
                                             </div>
                                         </div>
                                         <h4 class="job-title"> 
-                                            <a href="{{ url("/offre/".$post->slug) }}"> {{ $post->name }} </a>
+                                             {{ $post->name }}
                                             <span style="display:block">{{__("N° appel d'offre:")}} {{'AO'.'-'.$post->id.'-'.Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->year }}</span>
                                         </h4>
                                         <span class="info-row">

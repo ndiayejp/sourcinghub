@@ -39,6 +39,7 @@
     <link href="{{ asset('css/intlTelInput.min.css') }}" rel="stylesheet"  />
     <link href="{{ asset('css/slick.min.css') }}" rel="stylesheet"  />
     <link href="{{ asset('css/jquery.fancybox.min.css') }}" rel="stylesheet"  />
+    <link href="{{ asset('css/owl.carousel.min.css') }}" rel="stylesheet"  />
     
 
 </head>
@@ -63,6 +64,7 @@
         <script src="{{ asset('js/intlTelInput-jquery.min.js') }}"></script>
         <script src="{{ asset('js/jquery.easing.min.js') }}"></script>
         <script src="{{ asset('js/slick.min.js') }}"></script>
+        <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('js/jquery.fancybox.min.js') }}"></script>
           <script>
             toastr.options = {

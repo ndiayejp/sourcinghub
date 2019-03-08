@@ -29,7 +29,7 @@ class ContactsController extends Controller
     public function store(ContactRequest $request){
          
         $mailable  = new ContactMessageCreated($request->name,$request->email,$request->message);
-        Mail::to('ndiayejp@gmailcom')->send($mailable);
+        Mail::to('demba13@icloud.com')->send($mailable);
         Session::flash('success','Message bien envoyé');
         return redirect()->route('contact_path');
     }

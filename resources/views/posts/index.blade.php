@@ -50,12 +50,9 @@
                                         @if($posts->count()==0)
                                         <tr>
                                             <td colspan="6" class="text-center"><div class="btn btn-danger">{{ __('Aucune offre rattachée à ce compte') }}</div></td>
-                                            
                                         </tr>
-                                            
                                         @else
                                         @foreach ($posts as $post)
-                            
                                         <tr>    
                                             <td class="add-img-selector">
                                                 <div class="checkbox">
@@ -64,15 +61,18 @@
                                             </td>
                                             <td class="ads-details-td">{{ $post->name }}</td>
                                             <td class="ads-cat-td">
-                                                <span class="label label-default">{{ $post->cat_name }}</span>
+                                                <small>{{ $post->cat_name }}</small>
                                             </td>
                                             <td>{{ $post->view_count }}</td>
                                             <td><a href="{{ url("/offre/".$post->slug) }}" class="badge badge-light">{{ $post->offers_count }}</a>      </td>
                                             <td>
-                                                @if($post->active == 1)
+                                                @if($post->active == 1 && $post->state['url_state'] != 'attribuer')
                                                     <span class="badge bg-success">{{ __('Actif') }}</span>
-                                                @else
+                                                @elseif($post->active == 0 && $post->state['url_state'] != 'attribuer')
                                                     <span class="badge bg-danger">{{ __('Non actif') }}</span>
+                                                @elseif($post->state['url_state'] == 'attribuer')
+                                                    <span class="badge bg-danger">{{ __('clôturée') }}</span>
+                                                
                                                 @endif
                                             </td>
                                             <td>
@@ -86,8 +86,9 @@
                                             </td>
                                             <td class="action-td text-center">
                                                 <div class="btn-group-vertical" role="">
+                                                    @if($post->active==1)
                                                     <div class="btn-group"><a href="{{ route('posts.edit',$post->id)}}" class="btn btn-default" data-toggle="tooltip" title="Editer" data-toggle="tooltip"><i class="fa fa-pencil"></i> </a></div> 
-                                                    
+                                                    @endif   
                                                     {!! Form::open(['method' => 'delete','url' => route('posts.destroy',$post->id),'class'=>'btn-group','id'=>'form-button-delete']) !!}
                                                         {!! Form::button(__('<i class="fa fa-trash"></i> '),array('class'=>'btn btn-default ', 'type' => 'submit','title'=>"Supprimer",'data-toggle'=>'tooltip')) !!}
                                                     {!! Form::close() !!}
@@ -97,11 +98,11 @@
                                                         <div class="btn-group"><a href="#"   data-id="{{$post->id}}" data-toggle="modal" class="quickInvite btn btn-default" title="Inviter des fournisseurs"><i class="fa fa-envelope-open-o"></i> </a></div>
                                                         @endif
                                                     @endif
-                                                    @if($post->active==1)
+                                                    
                                                     <div class="btn-group">
                                                         <a href="{{ url("/offre/".$post->slug) }}" class="btn btn-default" data-toggle="tooltip" title="Voir l'offre"><i class="fa fa-file-text-o"></i> </a> 
                                                     </div>
-                                                    @endif
+                                                     
                                                 </div>
                                             </td>
                                         </tr>

@@ -219,8 +219,8 @@
                                                 <input type="text" id="fax" class="form-control"   name="fax" value="{{ Auth::user()->profile()->pluck('fax')[0] }}">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class=" col-md-6  {{ $errors->has('image') ? 'has-error' : ''}}">
+                                        <div class="form-group {{ $errors->has('image') ? 'has-error' : ''}}">
+                                            <div class=" col-md-12">
                                                 <label for="image">  {{ __("LOGO") }} : </label>
                                                 <input type="file" name="image">
                                                 @if ($errors->has('image'))
@@ -229,12 +229,7 @@
                                                     </span>
                                                 @endif
                                             </div>
-                                            @if(Auth::User() && (Auth::User()->profile) && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
-                                            <div class="col-md-6">
-                                                <label for="banner">  {{ __("Bannière") }} : </label>
-                                                <input type="file" name="banner">
-                                            </div>
-                                            @endif
+                                          
                                         </div>
                                         <div class="form-group {{ $errors->has('category_id') ? 'has-error' : ''}}">
                                                 <div  class="col-md-6">  

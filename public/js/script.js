@@ -35,15 +35,36 @@ jQuery(document).ready(function($){
 	$('[data-toggle="tooltip"]').tooltip();
 
 	$('.slider').slick({
-	    draggable: true,
-	    arrows: false,
-	    dots: false,
-	    fade: true,
-	    speed: 900,
-	    autoplay: true,
-	    infinite: true,
-	    cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
-	    touchThreshold: 100
+		draggable: true,
+		arrows: false,
+		dots: false,
+		fade: true,
+		speed: 900,
+		autoplay: true,
+		infinite: true,
+		cssEase: 'cubic-bezier(0.7, 0, 0.3, 1)',
+		touchThreshold: 100
+	});
+	$('.featured-p').slick({
+		slidesToShow: 3,
+		autoplay: true,
+		infinite: true,
+		speed: 800,
+		prevArrow: '<div class="slick-prev slick-arrow"><i class="fa fa-angle-left"></i></span>',
+		nextArrow: '<div  class="slick-next slick-arrow"><i class="fa fa-angle-right"></i></span>'
+ 		
+	})
+	$('.last-post').slick({
+		centerMode: true,
+		slidesToShow: 2,
+		autoplay: true,
+		infinite: true,
+		speed: 900,
+		dots: false,
+		arrows: false,
+		prevArrow: '<div class="slick-prev slick-arrow"><i class="fa fa-angle-left"></i></span>',
+		nextArrow: '<div  class="slick-next slick-arrow"><i class="fa fa-angle-right"></i></span>'
+
 	})
 	$('[data-fancybox="gallery"]').fancybox({
 		// Options will go here

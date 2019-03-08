@@ -33,11 +33,6 @@
                                             <i class="fa fa-edit"></i> {{ __(' Demandes de devis') }}
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="">
-                                            <i class="fa fa-comment"></i> {{ __("Demandes d'information") }}
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -52,14 +47,14 @@
                                 @if(Auth::User() && (Auth::User()->profile) && (Auth::user()->profile()->pluck('type')[0]=='fournisseur'))
                                     <li><a href="{{ route('posts') }}"><i class="icon-th-list"></i> {{ __("Appels d'offre ") }}</a>
                                     </li>
-                                    <li><a href="{{ route('archivedf') }}"> <i class="fa fa-archive"></i> {{ __('Archives') }}</a></li>
+                                    <li><a href="{{ route('archivedf') }}"> <i class="fa fa-archive"></i> {{ __('Offres attribuées') }}</a></li>
                                     <li><a href="{{ route('quotations') }}"><i class="fa fa-balance-scale"></i> {{ __("Demandes de devis") }}</a>
                                     </li>
                                     <li><a href="{{ route('customers') }}"> <i class="fa fa-users"></i> {{ __('Mes clients') }} </a>
                                     </li>
                                     <li><a href="{{ route('favourite') }}"><i class="fa fa-heart"></i> {{ __('Offres favorites') }}
                                             <span class="badge">
-                                                {{ Auth::user()->favorite_posts->where('pivot.user_id',Auth::user()->id)->count() }}
+                                                {{ Auth::user()->favorite_posts->where('pivot.user_id',Auth::user()->id)->where('state_id',1)->count() }}
                                             </span>&nbsp;
                                         </a>
                                     </li>
@@ -68,7 +63,7 @@
                                         <a href="{{ route('myposts') }}"><i class="fa fa-copy"></i> {{ __('Mes offres') }}</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('providers') }}"><i class="fa fa-users"></i> {{ __('Mes fournisseurs') }}</a>
+                                        <a href="{{ route('providers') }}"><i class="fa fa-users"></i> {{ __('Mes fournisseurs attributaires') }}</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('inprogress') }}"><i class="fa fa-folder-open"></i> {{ __('Mes consultations en cours') }}</a>

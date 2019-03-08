@@ -55,10 +55,13 @@ class ProfilesController extends Controller
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
             if ($user->image != 'noimage.jpg') {
                 $userImage = public_path("img/profile/{$user->image}");
-                unlink($userImage);
+                if (File::exists(public_path('img/profile/') . $user->image)) {
+                    unlink($userImage);
+                }
+
             }
             // Upload Image 
-            ImageManagerStatic::make($image)->resize(90, 80)->save("img/profile/{$fileNameToStore}");
+            ImageManagerStatic::make($image)->resize(120, 100)->save("img/profile/{$fileNameToStore}");
             $user->image = $fileNameToStore;
         }
         if (isset($banner)) {
@@ -85,24 +88,23 @@ class ProfilesController extends Controller
                 //get filename with extension
                 $filenamewithextension = $file->getClientOriginalName();
                 //get filename without extension
-                $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+                $filename = strtolower(pathinfo($filenamewithextension, PATHINFO_FILENAME));
                 //get file extension
                 $extension = $file->getClientOriginalExtension();
                 //filename to store
                 $filenametostore = $filename . '_' . uniqid() . '.' . $extension;
-                Storage::put('public/gallery/' . $filenametostore, fopen($file, 'r+'));
-                Storage::put('public/gallery/thumbnail/' . $filenametostore, fopen($file, 'r+'));
-    
-                //Resize image here
-                if (!Storage::disk('public')->exists('gallery')) {
-                    Storage::disk('public')->makeDirectory('gallery');
+
+                $destinationPath = public_path('img/galleries');
+
+                if (!File::exists($destinationPath)) {
+                    File::makeDirectory(public_path('img/galleries'));
                 }
-                // delete old post image
-                if (Storage::disk('public')->exists('gallery/' . $filenametostore)) {
-                    Storage::disk('public')->delete('gallery/' . $filenametostore);
-                }
-                $postImage = Image::make($file)->resize(400, 300)->save();
-                Storage::disk('public')->put('gallery/' . $filenametostore, $postImage);
+
+                $img = Image::make($file->getRealPath());
+
+                $img->resize(420, 250, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save("img/galleries" . '/' . $filenametostore);
 
                 Gallery::create([
                     'name' => $filenametostore,

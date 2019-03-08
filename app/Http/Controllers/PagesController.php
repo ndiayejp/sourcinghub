@@ -47,8 +47,11 @@ class PagesController extends Controller
          ->inProgress('en-cours')
          ->with('country')
          ->with('Company')
-         ->limit(3)
+         ->with('state')
+         ->where('state_id',1)
+         ->where('active',1)
          ->get();
+       
 
         $featuredProviders = User::where('featured', 1)
             ->with('Profile')

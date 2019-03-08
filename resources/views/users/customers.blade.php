@@ -29,7 +29,9 @@
                                     <div class="col-sm-10 col-xs-10 add-desc-box col-sm-12">
                                         <div class="add-details jobs-item"> 
                                             <h4 class="job-title">  {{ $user->company }}   </h4>
-                                            <h5 class="company-title">  {{ __("Représentant : ") }}   {{ $user->firstname.' '.$user->lastname}} 
+                                            <h5 class="company-title">  <i class="fa fa-user "></i>  
+                                                {{ $user->firstname.' '.$user->lastname}} <br>
+                                                <i class="fa fa-envelope"></i> {{ $user->email }}
                                             </h5>
                                             <span class="info-row">
                                                 <span class="date">  <i class="icon-phone"> </i> {{ $user->phone }}</span>

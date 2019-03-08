@@ -173,7 +173,7 @@
                                                     {{Form::label('payment_method', "Modalité de paiement :")}} <sup>*</sup>
                                                     {{  Form::select('payment_method', ['Immédiat' => 'Immédiat', 
                                                     '30 jours' => '30 jours','90 jours'=>'90 jours',
-                                                    'Négocier'=>'Négocier'],null,['class' => 'form-control select','placeholder'=>'Choississez une modalité']) }}
+                                                    'Négocier'=>'Négocier','Avance'=>'Avance'],null,['class' => 'form-control select','placeholder'=>'Choississez une modalité']) }}
                                                     @if ($errors->has('payment_method'))
                                                         <span class="help-block" role="alert">
                                                             <strong>{{ $errors->first('payment_method') }}</strong>
@@ -184,7 +184,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('offer_in_device') ? 'has-error' : ''}}">
                                                     {{Form::label('offer_in_device', "Offres à faire en :")}} <sup>*</sup>
-                                                    {{  Form::select('offer_in_device', ['Cfa' => 'Cfa', 'Euro' => 'Euro','Dollar'=>'Dollar'],null,['class' => 'form-control select','placeholder'=>'Choississez une devise']) }}
+                                                    {{  Form::select('offer_in_device', ['XOF' => 'XOF', 'Euro' => 'Euro','Dollar'=>'Dollar'],null,['class' => 'form-control select','placeholder'=>'Choississez une devise']) }}
                                                     @if ($errors->has('offer_in_device'))
                                                         <span class="help-block" role="alert">
                                                             <strong>{{ $errors->first('offer_in_device') }}</strong>

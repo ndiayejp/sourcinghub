@@ -11,7 +11,7 @@
             <div class="row info-row">
                 <div class="col-md-3">
                     <div>
-                        <h5>{{ __("Appel d'offre public ") }}</h5>
+                        <h5>{{ __("Appel d'offre ") }}</h5>
                         <p>@foreach ($post->opens as $open)
                             {{ $open->name.' ' }}
                         @endforeach</p>
@@ -91,7 +91,32 @@
                                             <ul class="list-group" style="margin-left:0 !important;">
                                              
                                                 <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Secteur d'activité: ") }}</strong>{{ $post->user->profile->category->name }}</li>
-                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Taille: ") }}</strong>{{ $post->user->profile()->pluck('firmsize')[0] }}</li>
+                                                <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Taille: ") }}</strong>
+                                                    @switch($post->user->profile()->pluck('firmsize')[0])
+                                                        @case(1)
+                                                            {{ __('0-9') }}
+                                                            @break
+
+                                                        @case(2)
+                                                            {{ __('10-49') }}
+                                                            @break
+                                                        
+                                                        @case(3)
+                                                            {{ __('50-499') }}
+                                                            @break
+
+                                                        @case(4)
+                                                            {{ __('500-999') }}
+                                                            @break
+                                                        
+                                                        @case(5)
+                                                        {{ __('plus de 1000') }}
+                                                        @break
+
+                                                        @default
+                                                           {{ __('aucune information') }}
+                                                    @endswitch
+                                                </li>
                                                 <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Pays: ") }} </strong>{{ $post->country->name }}</li>
                                                 <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Ninéa: ") }}</strong> {{ $post->user->profile()->pluck('siret')[0] }}</li>
                                                 <li class="list-group-item" style="margin-left:0 !important;"><strong>{{ __("Adresse de facturation: ") }}</strong> {{ $post->address_delivery }}</li>
@@ -152,12 +177,12 @@
                                     <p class="no-margin"><b>{{ __("Référence de l'offre: ") }}</b> {{ 'AO-'.$post->id.'-'.Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $post->created_at)->year }}</p>
                                 </li>
                                 <li>
-                                    <p class="no-margin"> <strong>{{ __('Entreprise') }}:</strong> 
+                                    <p class="no-margin"><strong>{{ __('Entreprise') }}:</strong> 
                                         <a href="{{ route('companies.edit', $post->company->id)}}">{{ $post->company->name }}</a> 
                                     </p>
                                 </li>
                                 <li>
-                                    <p class="no-margin"> <strong>{{ __('Adresse') }}:</strong>&nbsp;  {{ $post->company->address }}
+                                    <p class="no-margin"> <strong>{{ __('Adresse') }}:</strong>&nbsp;  {{ Auth::user()->profile()->pluck('address')[0] }}
                                     </p>
                                 </li> 
                             </ul>
@@ -177,11 +202,11 @@
                                                     @for ($i = 0 ; $i < sizeof($post->items);$i++ ) 
                                                     <?php $proposals= $post->items[$i]->proposals->count();?>
                                                     @for ( $j = 0 ; ($j < $proposals)&&($i==0) ; $j++ ) 
-                                                        <td class="column4" colspan="3" style="background-color: #073b8a;color:#fff">
+                                                        <td colspan="3" style="background-color: #073b8a;color:#fff;border-right:2px solid #fff;">
                                                             <h4 style="text-transform:uppercase">{{ $post->items[$i]->proposals[$j]->user->profile['company'] }} </h4>
-                                                            <small>{{ $post->items[$i]->proposals[$j]->user->firstname.' '.$post->items[$i]->proposals[$j]->user->lastname }}</small><br>
-                                                            <small>{{ $post->items[$i]->proposals[$j]->user->email }}</small><br>
-                                                            <small>{{ $post->items[$i]->proposals[$j]->user->profile['phone'] }}</small>
+                                                            <span>{{ $post->items[$i]->proposals[$j]->user->firstname.' '.$post->items[$i]->proposals[$j]->user->lastname }}</span><br>
+                                                            <span>{{ $post->items[$i]->proposals[$j]->user->email }}</span><br>
+                                                            <span>{{ $post->items[$i]->proposals[$j]->user->profile['phone'] }}</span>
                                                         </td>
                                                     @endfor 
                                                 </tr>
@@ -192,8 +217,8 @@
                                                 <td class="style7">{{ __("Quantity") }}</td>
                                                 <td class="style7">{{ __("Unit") }}</td>  
                                                 @for ($i=0; $i <  $proposals ; $i++   )
-                                                    <td class="column4 style7 s">{{ __('Unit price') }}</td>
-                                                    <td colspan="2" class="column5 style7 s">{{ __('Total') }} <small>{{ $post->offer_in_device }}</small></td>
+                                                    <td class="style7" style="border-left:2px solid #c3c2c2;width:auto">{{ __('Unit price') }}</td>
+                                                    <td colspan="2" class="style7" style="border-right:2px solid #c3c2c2;width:auto">{{ __('Total') }} <small>{{ $post->offer_in_device }}</small></td>
                                                 @endfor 
                                             </tr>
                                         </thead> 
@@ -208,42 +233,42 @@
                                                 }?>
                                             @foreach ( $post->items as $k=>$v)
                                                 <tr id="row-{{ $k }}" class="rowItem">
-                                                    <td>{{ $v['item_name'] }}</td>
-                                                    <td>{{ $v['item_description'] }} </td>
-                                                    <td>{{ $v['item_qte'] }}</td>
-                                                    <td>{{ $v['item_unit']  }}</td>
+                                                    <td style="font-weight:600;">{{ $v['item_name'] }}</td>
+                                                    <td style="font-weight:600;">{{ $v['item_description'] }} </td>
+                                                    <td class="text-center">{{ $v['item_qte'] }}</td>
+                                                    <td class="text-center">{{ $v['item_unit']  }}</td>
                                                         <?php $i = 0; $g=1 ?>
                                                         @foreach ($v->proposals as $kk=>$vv )  
                                                             <?php   
                                                             $tab[$vv['id']] =  $vv['price']* $v['item_qte'];
                                                             $sum[$i] +=   $vv['price']* $v['item_qte'] ; ?>
-                                                            <td>{{ $vv['price'] }}</td> 
+                                                            <td class="text-right" style="border-left:2px solid #c3c2c2;">{{ number_format($vv['price'],0,',',' ') }}</td> 
                                                             <?php $tab[$i]= $vv['price']* $v['item_qte']  ; ?>
-                                                            <td colspan="2"class="Totalprice"  id="Totalprice-{{ $k }}-{{ $kk }}">  
-                                                                {{  $vv['price']*$v['item_qte'] }} 
+                                                            <td colspan="2"class="text-right Totalprice" style="border-right:2px solid #c3c2c2;" id="Totalprice-{{ $k }}-{{ $kk }}">  
+                                                                {{  number_format($vv['price']*$v['item_qte'],0,',',' ') }} 
                                                             </td>
                                                             <?php $i++; $g++; ?> 
                                                         @endforeach
                                                 </tr>
                                             @endforeach
                                             <tr>
-                                                <td colspan="4" class="style7" style="text-align:left">{{ __("Total des Articles") }}</td>
+                                                <td colspan="4" class="style7 text-right">{{ __("Total des Articles") }}</td>
                                                 @for ($i =0 ; $i <sizeof($sum) ; $i++)
-                                                    <td colspan="3"  class="style7"   style="text-align:center">   {{ number_format($sum[$i],2, ',', ' ') }}</td>
+                                                    <td colspan="3"  class="style7 text-right" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">   {{ number_format($sum[$i],0, ',', ' ') }}</td>
                                                 @endfor    
                                             </tr>
                                             <tr>
-                                                <td colspan="4" style="text-align:left; background:#000;color:#fff;">{{ __("Coût du transport") }}</td>
+                                                <td colspan="4" style="text-align:left; background:#000;color:#fff;font-weight:600;font-size:16px;">{{ __("Coût du transport") }}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ ) 
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
                                                         <?php  $sumTotal[$j] += $sum[$j] + $post->replies[$j]->amount;?>
-                                                        <td colspan="3" style="text-align:center">{{ number_format($post->replies[$j]->amount,2,',',' ') }} </td>
+                                                        <td colspan="3" class="text-right" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">{{ number_format($post->replies[$j]->amount,0,',',' ') }} </td>
                                                     @endfor
                                                 @endfor  
                                             </tr>
                                             <tr class="grandTotal">
-                                                <td colspan="4" style="text-align:left;background:#000;color:red;">{{ __("Grand Total ")  }} ({{ $post->offer_in_device }})</td>
+                                                <td colspan="4" style="text-align:left;background:#000;color:red;font-weight:600;font-size:16px;">{{ __("Grand Total ")  }} ({{ $post->offer_in_device }})</td>
                                                 <?php 
                                                 if(count($sumTotal)>0){
                                                      $minTotal =   min($sumTotal);
@@ -251,15 +276,17 @@
                                                
                                                 ?>
                                                 @for ($i =0 ; $i <sizeof($sumTotal) ; $i++)
-                                                    <td colspan="3" id="totalSum-{{$i}}" class="totalSum" style="text-align:center">{{ $sumTotal[$i] }} </td>
+                                                    <td colspan="3" id="totalSum-{{$i}}" class="text-right totalSum" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">
+                                                        {{ number_format($sumTotal[$i],0,',',' ') }}
+                                                    </td>
                                                 @endfor    
                                             </tr>
                                             <tr class="row10">
-                                                <td colspan="4" style="text-align:left;background:#000;color:#fff;">{{ __("Différence") }}</td>
+                                                <td colspan="4" style="text-align:left;background:#000;color:#fff;font-weight:600;font-size:16px;">{{ __("Différence") }}</td>
                                                 @for ($i =0 ; $i <sizeof($sumTotal) ; $i++)
-                                                        <td colspan="3" style="text-align:center"> 
+                                                        <td colspan="3" class="text-right" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;"> 
                                                             <span><?php $amountDiff =  ($sumTotal[$i] - $minTotal );
-                                                             echo number_format($amountDiff,2,',',' ');?>
+                                                             echo number_format($amountDiff,0,',',' ');?>
                                                             </span>
                                                         </td>
                                                  @endfor
@@ -267,51 +294,51 @@
                                             @if(!empty($post->budget))
                                             <tr class="row9">
                                                 <td colspan="3">{{ __('Budget') }}</td>
-                                                <td colspan="9" style='text-align:center' class="column4"> {{ $post->budget }}</td>
+                                                <td colspan="9" style='text-align:center border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;' class="column4"> {{ $post->budget }}</td>
                                             </tr>
                                             @endif
                                             <tr class="row10">
-                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333">{{ __("Termes de Paiement")}}</td>
+                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333;font-weight:600;font-size:16px;">{{ __("Termes de Paiement")}}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td  colspan="3">{{ $post->replies[$j]->payment }}</td>
+                                                    <td  colspan="3" class="text-center" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">{{ $post->replies[$j]->payment }}</td>
                                                     @endfor
                                                 @endfor
                                             </tr>
                                             <tr class="row10">
-                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333">{{ __("Date de livraison") }}</td>
+                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333;font-weight:600;font-size:16px;">{{ __("Date de livraison") }}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td colspan="3">{{ $post->replies[$j]->delivery }}</td>
+                                                    <td colspan="3" class="text-center" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">{{ $post->replies[$j]->delivery }}</td>
                                                     @endfor
                                                 @endfor
                                             </tr>
                                             <tr class="row10">
-                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333">{{ __("Incoterm") }}</td>
+                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333;font-weight:600;font-size:16px;">{{ __("Incoterm") }}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td colspan="3">{{ $post->replies[$j]->incoterm->code }}</td>
+                                                    <td colspan="3" class="text-center" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">{{ $post->replies[$j]->incoterm->code }}</td>
                                                     @endfor
                                                 @endfor
                                             </tr>
                                             <tr class="row10">
-                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333">{{ __("Commentaires") }}</td>
+                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333;font-weight:600;font-size:16px;">{{ __("Commentaires") }}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td colspan="3">{!! $post->replies[$j]->body !!}</td>
+                                                    <td colspan="3" class="text-center" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">{!! $post->replies[$j]->body !!}</td>
                                                     @endfor
                                                 @endfor
                                             </tr>
                                             <tr class="row10">
-                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333">{{ __("Fichier attaché") }}</td>
+                                                <td colspan="4" style="background-color: #fdaf3a;border-bottom:1px solid #333;font-weight:600;font-size:16px;">{{ __("Fichier attaché") }}</td>
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td  colspan="3">
+                                                    <td  colspan="3" class="text-center" style="border-right:2px solid #c3c2c2;border-left:2px solid #c3c2c2;">
                                                         @if(!empty($post->replies[$j]->file))
                                                             {{ __("1 fichier") }} 
                                                             <a href="{{ URL::to( 'uploads/' . $post->replies[$j]->file)  }}" download="{{ $post->replies[$j]->file}}">
@@ -325,7 +352,7 @@
                                                 @endfor
                                             </tr>
                                             <tr style="background-color: #f9dbae;">
-                                                <td colspan="4" style="background-color: #fff;" >{{ __("Attribution") }}</td>
+                                                <td colspan="4" style="background-color: #fff;font-weight:600;font-size:16px;" >{{ __("Attribution") }}</td>
                                                 <form action="{{ route('assign.store',$post->id) }}" method="POST" id="formAssign" >
                                                 @csrf
                                                 <input type="hidden" value="{{ $post->id }}" name="postID">
@@ -333,7 +360,7 @@
                                                 @for ($i = 0 ; $i < sizeof($post->items);$i++ )
                                                     <?php $replies= $post->replies->count();?>
                                                     @for ( $j = 0 ; ($j < $replies)&&($i==0) ; $j++ ) 
-                                                    <td  colspan="3">
+                                                    <td  colspan="3" class="style13 text-center" style="">
                                                         <input type="radio" name="provider" value="{{ $post->items[$i]->proposals[$j]->user->id }}" 
                                                         <?php echo  $getAssigns > 0 && $post->items[$i]->proposals[$j]->user->id == $post->assigns[$i]->provider_id? "checked" : ""  ?>>
                                                     </td>
@@ -415,7 +442,7 @@
                                     {{Form::label('payment', __("Modalité de paiement"))}} <sup>*</sup>
                                     {{  Form::select('payment', ['Immédiat' => 'Immédiat', 
                                     '30 jours' => '30 jours','90 jours'=>__('90 jours'),
-                                    'Négocier'=>'Négocier'],isset($postByOwner->replies[0]['payment']) ? $postByOwner->replies[0]['payment'] : '',['class' => 'form-control select','placeholder'=>'choisissez une modalité']) }}
+                                    'Négocier'=>'Négocier','Avance'=>'Avance'],isset($postByOwner->replies[0]['payment']) ? $postByOwner->replies[0]['payment'] : '',['class' => 'form-control select','placeholder'=>'choisissez une modalité']) }}
                                     @if ($errors->has('payment'))
                                         <span class="help-block" role="alert">
                                             <strong>{{ $errors->first('payment') }}</strong>
